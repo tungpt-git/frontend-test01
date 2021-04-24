@@ -4,11 +4,9 @@ import { ActionTypes } from "../../utils/enum";
 
 export const searchVideos = (query: string) => async (dispatch: Dispatch) => {
   try {
-    const res = await api.searchVideos({ query });
-    console.log(res);
+    const res: any = await api.searchVideos({ query });
 
-    const action = { type: ActionTypes.SEARCH_VIDEOS, payload: res.data };
-    dispatch(action);
+    dispatch({ type: ActionTypes.SEARCH_VIDEOS, payload: res.hits });
   } catch (error) {
     console.log(error.message);
   }

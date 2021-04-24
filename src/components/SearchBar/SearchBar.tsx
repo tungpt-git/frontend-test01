@@ -12,7 +12,8 @@ const useStyles = makeStyles((theme: Theme) =>
       padding: "2px 4px",
       display: "flex",
       alignItems: "center",
-      width: 400,
+      width: "40vw",
+      minWidth: "400px",
       borderRadius: "9999px",
     },
     input: {
@@ -36,11 +37,7 @@ export default function SearchBar(props: Props) {
   const [text, setText] = React.useState("");
 
   return (
-    <Paper
-      component="form"
-      className={classes.root}
-      onSubmit={() => props.onSubmit(text)}
-    >
+    <Paper className={classes.root}>
       <IconButton className={classes.iconButton} aria-label="menu">
         <MenuIcon />
       </IconButton>
@@ -56,6 +53,7 @@ export default function SearchBar(props: Props) {
         type="submit"
         className={classes.iconButton}
         aria-label="search"
+        onClick={() => props.onSubmit(text)}
       >
         <SearchIcon />
       </IconButton>
