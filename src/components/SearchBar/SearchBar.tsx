@@ -30,11 +30,14 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
-type Props = any;
+type Props = {
+  onSubmit(query: string): void;
+  defaultValue?: string;
+};
 
 export default function SearchBar(props: Props) {
   const classes = useStyles();
-  const [text, setText] = React.useState("");
+  const [text, setText] = React.useState(props.defaultValue || "");
 
   return (
     <Paper className={classes.root}>
@@ -45,8 +48,14 @@ export default function SearchBar(props: Props) {
         className={classes.input}
         placeholder="Enter search query"
         inputProps={{ "aria-label": "enter search query" }}
-        onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+        value={text}
+        onChange={(
+          event: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>
+        ) => {
           setText(event.currentTarget.value);
+        }}
+        onKeyDown={(event: React.KeyboardEvent) => {
+          if (event.key === "Enter") props.onSubmit(text);
         }}
       />
       <IconButton

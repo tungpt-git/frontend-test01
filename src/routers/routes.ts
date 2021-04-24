@@ -1,4 +1,5 @@
 const ROUTES = {
-  SEARCH: "/search",
+  SEARCH: "/",
+  SEARCH_RESULT: "/:query/result",
 };
 export default ROUTES;

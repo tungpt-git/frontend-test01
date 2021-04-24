@@ -1,15 +1,18 @@
 import React from "react";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
-import { Search } from "../pages";
+import { ROUTES } from ".";
+import { Search, SearchResult } from "../pages";
 
 export default function GlobalRouters() {
   return (
     <Router>
       <Switch>
-        <Route exact path="/">
+        <Route exact path={ROUTES.SEARCH}>
           <Search />
         </Route>
-        <Route path="/about"></Route>
+        <Route path={ROUTES.SEARCH_RESULT}>
+          <SearchResult />
+        </Route>
       </Switch>
     </Router>
   );

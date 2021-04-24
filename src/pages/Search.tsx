@@ -1,19 +1,28 @@
+import { Box } from "@material-ui/core";
 import React from "react";
-import { useDispatch } from "react-redux";
+import { useHistory } from "react-router";
 import SearchBar from "../components/SearchBar/SearchBar";
-import { searchVideos } from "../store/actions/videos";
+import { ROUTES } from "../routers";
 
 export default function Search() {
-  const dispatch = useDispatch();
+  const history = useHistory();
 
   return (
-    <>
+    <Box
+      display="flex"
+      alignItems="center"
+      justifyContent="center"
+      height="100vh"
+      minWidth="fit-content"
+    >
       <SearchBar
         onSubmit={(query: string) => {
           if (!query) return;
-          dispatch(searchVideos(query));
+          history.push(
+            ROUTES.SEARCH_RESULT.replace(":query", encodeURIComponent(query))
+          );
         }}
       />
-    </>
+    </Box>
   );
 }
