@@ -9,10 +9,12 @@ import { ArrowBack } from "@material-ui/icons";
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory, useParams } from "react-router";
+import MediaCard from "../components/MediaCard/MediaCard";
 import SearchBar from "../components/SearchBar/SearchBar";
 import MenuLayout from "../layouts/MenuLayout";
 import { ROUTES } from "../routers";
 import { searchVideos } from "../store/actions/videos";
+import { IVideo } from "../utils/types";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -53,7 +55,18 @@ export default function SearchResult() {
         ></SearchBar>
       </Box>
       SearchResult
-      {JSON.stringify(videos)}
+      <Box
+        display="grid"
+        gridGap={12}
+        gridTemplateColumns={`repeat(auto-fill, minmax(250px, 1fr))`}
+      >
+        {JSON.stringify(videos)}
+        {/* {videos.map((video, index: number) => (
+          <React.Fragment key={index}>
+            <MediaCard video={video} />
+          </React.Fragment>
+        ))} */}
+      </Box>
     </MenuLayout>
   );
 }
