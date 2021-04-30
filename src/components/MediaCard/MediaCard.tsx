@@ -1,20 +1,14 @@
 import React from "react";
-import {
-  Theme,
-  createStyles,
-  makeStyles,
-  useTheme,
-} from "@material-ui/core/styles";
+import { Theme, createStyles, makeStyles } from "@material-ui/core/styles";
 import Card from "@material-ui/core/Card";
 import CardContent from "@material-ui/core/CardContent";
 import CardMedia from "@material-ui/core/CardMedia";
 import IconButton from "@material-ui/core/IconButton";
 import Typography from "@material-ui/core/Typography";
-import SkipPreviousIcon from "@material-ui/icons/SkipPrevious";
 import PlayArrowIcon from "@material-ui/icons/PlayArrow";
-import SkipNextIcon from "@material-ui/icons/SkipNext";
 import { IVideo } from "../../utils/types";
 import moment from "moment";
+import { Box } from "@material-ui/core";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -37,6 +31,11 @@ const useStyles = makeStyles((theme: Theme) =>
     },
     cover: {
       width: 180,
+      position: "relative",
+      "&:hover": {
+        // opacity: 0.3,
+        cursor: "pointer",
+      },
     },
     controls: {
       display: "flex",
@@ -47,55 +46,63 @@ const useStyles = makeStyles((theme: Theme) =>
     playIcon: {
       height: 38,
       width: 38,
+      color: "#fff",
+    },
+    coverOverlay: {
+      height: "100%",
+      width: "100%",
+      opacity: 0,
+      position: "absolute",
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "center",
+      top: 0,
+      left: 0,
+      transition: "opacity 0.3s",
+      "&:hover": {
+        backgroundColor: "rgba(0,0,0,0.6)",
+        opacity: 1,
+      },
     },
   })
 );
 
 type Props = {
   video: IVideo;
+  onPlay(): void;
 };
 
-export default function MediaControlCard({ video }: Props) {
+export default function MediaControlCard({ video, onPlay }: Props) {
   const classes = useStyles();
-  const theme = useTheme();
 
   return (
     <Card className={classes.root}>
-      <CardMedia
-        className={classes.cover}
-        component={"img"}
-        image={video.thumbnail}
-        title="Live from space album cover"
-      />
-      <div className={classes.details}>
-        <CardContent className={classes.content}>
-          <Typography component="h5" variant="h5" title={video.name}>
-            {video.name}
-          </Typography>
-          <Typography variant="subtitle1" color="textSecondary">
-            {moment(video.uploadedDate).format("DD-MM-YYYY")}
-          </Typography>
-        </CardContent>
-
-        <div className={classes.controls}>
-          {/* <IconButton aria-label="previous">
-            {theme.direction === "rtl" ? (
-              <SkipNextIcon />
-            ) : (
-              <SkipPreviousIcon />
-            )}
-          </IconButton>
+      <Box className={classes.cover} onClick={onPlay}>
+        <CardMedia
+          component={"img"}
+          image={video.thumbnail}
+          title="Live from space album cover"
+        />
+        <Box className={classes.coverOverlay}>
           <IconButton aria-label="play/pause">
             <PlayArrowIcon className={classes.playIcon} />
           </IconButton>
-          <IconButton aria-label="next">
-            {theme.direction === "rtl" ? (
-              <SkipPreviousIcon />
-            ) : (
-              <SkipNextIcon />
-            )}
-          </IconButton> */}
-        </div>
+        </Box>
+      </Box>
+      <div className={classes.details}>
+        <CardContent className={classes.content}>
+          <Typography
+            component="h5"
+            variant="h5"
+            title={video.name}
+            onClick={onPlay}
+          >
+            {video.name}
+          </Typography>
+          <Typography variant="body2" color="textSecondary">
+            {moment(video.uploadedDate).fromNow()}
+          </Typography>
+        </CardContent>
       </div>
     </Card>
   );

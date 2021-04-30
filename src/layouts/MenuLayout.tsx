@@ -8,7 +8,6 @@ import ListItem from "@material-ui/core/ListItem";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
 import ListItemText from "@material-ui/core/ListItemText";
 import MailIcon from "@material-ui/icons/Mail";
-import Container from "@material-ui/core/Container";
 
 import {
   makeStyles,
@@ -16,7 +15,13 @@ import {
   Theme,
   createStyles,
 } from "@material-ui/core/styles";
-import { Box } from "@material-ui/core";
+import { Box, IconButton } from "@material-ui/core";
+import { ArrowBack } from "@material-ui/icons";
+import SearchBar from "../components/SearchBar/SearchBar";
+import { useDispatch, useSelector } from "react-redux";
+import { searchVideos } from "../store/actions/videos";
+import { updateQuery } from "../store/actions/query";
+import { IStore } from "../utils/types";
 
 const drawerWidth = 240;
 
@@ -72,6 +77,16 @@ export default function MenuLayout(props: Props) {
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);
   };
+
+  const dispatch = useDispatch();
+  const query = useSelector((state: IStore) => state.query);
+  console.log(query);
+
+  React.useEffect(() => {
+    if (query) {
+      dispatch(searchVideos(decodeURIComponent(query)));
+    }
+  }, [dispatch, query]);
 
   const drawer = (
     <div>
@@ -139,6 +154,21 @@ export default function MenuLayout(props: Props) {
           </Drawer>
         </Hidden>
       </nav>
+      <Box display="flex" alignItems="center" style={{ gap: 8 }}>
+        <IconButton
+          aria-label="back"
+          className={classes.iconButton}
+          onClick={() => {}}
+        >
+          <ArrowBack />
+        </IconButton>
+        <SearchBar
+          defaultValue={query}
+          onSubmit={(s: string) => {
+            dispatch(updateQuery(s));
+          }}
+        />
+      </Box>
       <Box className={classes.content}>
         <React.Fragment>{props.children}</React.Fragment>
       </Box>

@@ -1,4 +1,5 @@
 export interface IVideo {
+  uid: string;
   name: string;
   url: string;
   thumbnail: string;
@@ -9,3 +10,8 @@ export interface IVideo {
     text: string;
   };
 }
+
+export type IStore = {
+  videos: IVideo[];
+  query: string;
+};
