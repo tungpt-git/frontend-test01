@@ -9,7 +9,7 @@ export const searchVideos = async (req: { query: string }) => {
       return {
         total: data.hits.total.value,
         items: data.hits.hits.map((item: any) => ({
-          name: item._source.name,
+          ...item._source,
           segments: item.inner_hits.segments.hits.hits.map((s: any) => ({
             start: s._source.start,
             end: s._source.end,

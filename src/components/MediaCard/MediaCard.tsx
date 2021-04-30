@@ -1,52 +1,102 @@
 import React from "react";
-import { makeStyles } from "@material-ui/core/styles";
+import {
+  Theme,
+  createStyles,
+  makeStyles,
+  useTheme,
+} from "@material-ui/core/styles";
 import Card from "@material-ui/core/Card";
-import CardActionArea from "@material-ui/core/CardActionArea";
-import CardActions from "@material-ui/core/CardActions";
 import CardContent from "@material-ui/core/CardContent";
 import CardMedia from "@material-ui/core/CardMedia";
-import Button from "@material-ui/core/Button";
+import IconButton from "@material-ui/core/IconButton";
 import Typography from "@material-ui/core/Typography";
+import SkipPreviousIcon from "@material-ui/icons/SkipPrevious";
+import PlayArrowIcon from "@material-ui/icons/PlayArrow";
+import SkipNextIcon from "@material-ui/icons/SkipNext";
 import { IVideo } from "../../utils/types";
+import moment from "moment";
 
-const useStyles = makeStyles({
-  root: {
-    maxWidth: 345,
-  },
-  media: {
-    height: 140,
-  },
-});
+const useStyles = makeStyles((theme: Theme) =>
+  createStyles({
+    root: {
+      display: "flex",
+    },
+    details: {
+      display: "flex",
+      flexDirection: "column",
+      textAlign: "left",
+      flex: 1,
+      overflow: "hidden",
+      "& *": {
+        overflow: "hidden",
+        textOverflow: "ellipsis",
+      },
+    },
+    content: {
+      flex: "1 0 auto",
+    },
+    cover: {
+      width: 180,
+    },
+    controls: {
+      display: "flex",
+      alignItems: "center",
+      paddingLeft: theme.spacing(1),
+      paddingBottom: theme.spacing(1),
+    },
+    playIcon: {
+      height: 38,
+      width: 38,
+    },
+  })
+);
 
-export default function MediaCard(props: { video: IVideo }) {
+type Props = {
+  video: IVideo;
+};
+
+export default function MediaControlCard({ video }: Props) {
   const classes = useStyles();
+  const theme = useTheme();
 
   return (
     <Card className={classes.root}>
-      <CardActionArea>
-        <CardMedia
-          className={classes.media}
-          image="https://www.elegantthemes.com/blog/wp-content/uploads/2019/04/change-wordpress-thumbnail-size-featured-image.jpg"
-          title="Contemplative Reptile"
-        />
-        <CardContent>
-          <Typography gutterBottom variant="h5" component="h2">
-            Lizard
+      <CardMedia
+        className={classes.cover}
+        component={"img"}
+        image={video.thumbnail}
+        title="Live from space album cover"
+      />
+      <div className={classes.details}>
+        <CardContent className={classes.content}>
+          <Typography component="h5" variant="h5" title={video.name}>
+            {video.name}
           </Typography>
-          <Typography variant="body2" color="textSecondary" component="p">
-            Lizards are a widespread group of squamate reptiles, with over 6,000
-            species, ranging across all continents except Antarctica
+          <Typography variant="subtitle1" color="textSecondary">
+            {moment(video.uploadedDate).format("DD-MM-YYYY")}
           </Typography>
         </CardContent>
-      </CardActionArea>
-      <CardActions>
-        <Button size="small" color="primary">
-          Share
-        </Button>
-        <Button size="small" color="primary">
-          Learn More
-        </Button>
-      </CardActions>
+
+        <div className={classes.controls}>
+          {/* <IconButton aria-label="previous">
+            {theme.direction === "rtl" ? (
+              <SkipNextIcon />
+            ) : (
+              <SkipPreviousIcon />
+            )}
+          </IconButton>
+          <IconButton aria-label="play/pause">
+            <PlayArrowIcon className={classes.playIcon} />
+          </IconButton>
+          <IconButton aria-label="next">
+            {theme.direction === "rtl" ? (
+              <SkipPreviousIcon />
+            ) : (
+              <SkipNextIcon />
+            )}
+          </IconButton> */}
+        </div>
+      </div>
     </Card>
   );
 }

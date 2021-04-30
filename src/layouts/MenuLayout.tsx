@@ -8,6 +8,7 @@ import ListItem from "@material-ui/core/ListItem";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
 import ListItemText from "@material-ui/core/ListItemText";
 import MailIcon from "@material-ui/icons/Mail";
+import Container from "@material-ui/core/Container";
 
 import {
   makeStyles,
@@ -15,6 +16,7 @@ import {
   Theme,
   createStyles,
 } from "@material-ui/core/styles";
+import { Box } from "@material-ui/core";
 
 const drawerWidth = 240;
 
@@ -48,7 +50,7 @@ const useStyles = makeStyles((theme: Theme) =>
     },
     content: {
       flexGrow: 1,
-      padding: theme.spacing(2),
+      padding: `${theme.spacing(5)}px ${theme.spacing(6)}px`,
     },
     iconButton: {
       padding: 10,
@@ -58,10 +60,6 @@ const useStyles = makeStyles((theme: Theme) =>
 );
 
 type Props = PropsWithChildren<{
-  /**
-   * Injected by the documentation to work in an iframe.
-   * You won't need it on your project.
-   */
   window?: () => Window;
 }>;
 
@@ -141,7 +139,9 @@ export default function MenuLayout(props: Props) {
           </Drawer>
         </Hidden>
       </nav>
-      <main className={classes.content}>{props.children}</main>
+      <Box className={classes.content}>
+        <React.Fragment>{props.children}</React.Fragment>
+      </Box>
     </div>
   );
 }

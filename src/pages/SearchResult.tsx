@@ -1,5 +1,6 @@
 import {
   Box,
+  Container,
   createStyles,
   IconButton,
   makeStyles,
@@ -27,7 +28,7 @@ const useStyles = makeStyles((theme: Theme) =>
 export default function SearchResult() {
   const classes = useStyles();
 
-  const videos = useSelector((state: any) => state.videos);
+  const videos = useSelector((state: { videos: IVideo[] }) => state.videos);
   const dispatch = useDispatch();
 
   const history = useHistory();
@@ -54,18 +55,19 @@ export default function SearchResult() {
           }}
         ></SearchBar>
       </Box>
-      SearchResult
-      <Box
-        display="grid"
-        gridGap={12}
-        gridTemplateColumns={`repeat(auto-fill, minmax(250px, 1fr))`}
-      >
-        {JSON.stringify(videos)}
-        {/* {videos.map((video, index: number) => (
-          <React.Fragment key={index}>
-            <MediaCard video={video} />
-          </React.Fragment>
-        ))} */}
+
+      <Box mt={3}>
+        <Box
+          display="grid"
+          gridGap={24}
+          gridTemplateColumns={`repeat(auto-fill, minmax(360px, 1fr))`}
+        >
+          {videos.map((video: IVideo, index: number) => (
+            <React.Fragment key={index}>
+              <MediaCard video={video} />
+            </React.Fragment>
+          ))}
+        </Box>
       </Box>
     </MenuLayout>
   );
