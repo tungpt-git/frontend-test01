@@ -1,3 +1,4 @@
+import { CircularProgress } from "@material-ui/core";
 import axios from "axios";
 import React from "react";
 import ReactPlayer from "react-player";
@@ -11,10 +12,11 @@ export default function WatchVideo(props: Props) {
   const { id } = useParams<{ id: string }>();
 
   const [video, setVideo] = React.useState<IVideo>();
+
   React.useEffect(() => {
     const fetchVideo = async (id: string) => {
       const res = await getVideo({ id });
-      console.log(res);
+      setVideo(res);
     };
 
     fetchVideo(id);
@@ -22,11 +24,11 @@ export default function WatchVideo(props: Props) {
 
   return (
     <MenuLayout>
-      <ReactPlayer
-        controls
-        pip={true}
-        url="https://www.youtube.com/watch?v=ysz5S6PUM-U"
-      />
+      {!video ? (
+        <CircularProgress />
+      ) : (
+        <ReactPlayer controls pip={true} url={video.url} />
+      )}
     </MenuLayout>
   );
 }
