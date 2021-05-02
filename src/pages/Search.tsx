@@ -19,7 +19,7 @@ export default function Search() {
         onSubmit={(query: string) => {
           if (!query) return;
           history.push(
-            ROUTES.SEARCH_RESULT.replace(":query", encodeURIComponent(query))
+            ROUTES.SEARCH_RESULT + `?query=${encodeURIComponent(query)}`
           );
         }}
       />

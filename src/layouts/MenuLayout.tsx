@@ -22,6 +22,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { searchVideos } from "../store/actions/videos";
 import { updateQuery } from "../store/actions/query";
 import { IStore } from "../utils/types";
+import { useHistory } from "react-router";
 
 const drawerWidth = 240;
 
@@ -78,16 +79,10 @@ export default function MenuLayout(props: Props) {
     setMobileOpen(!mobileOpen);
   };
 
+  const history = useHistory();
+
   const dispatch = useDispatch();
   const query = useSelector((state: IStore) => state.query);
-  console.log(query);
-
-  React.useEffect(() => {
-    if (query) {
-      dispatch(searchVideos(decodeURIComponent(query)));
-    }
-  }, [dispatch, query]);
-
   const drawer = (
     <div>
       <div className={classes.toolbar}>LOGO</div>
@@ -154,22 +149,24 @@ export default function MenuLayout(props: Props) {
           </Drawer>
         </Hidden>
       </nav>
-      <Box display="flex" alignItems="center" style={{ gap: 8 }}>
-        <IconButton
-          aria-label="back"
-          className={classes.iconButton}
-          onClick={() => {}}
-        >
-          <ArrowBack />
-        </IconButton>
-        <SearchBar
-          defaultValue={query}
-          onSubmit={(s: string) => {
-            dispatch(updateQuery(s));
-          }}
-        />
-      </Box>
+
       <Box className={classes.content}>
+        <Box display="flex" alignItems="center" style={{ gap: 8 }}>
+          <IconButton
+            aria-label="back"
+            onClick={() => {
+              history.goBack();
+            }}
+          >
+            <ArrowBack />
+          </IconButton>
+          <SearchBar
+            defaultValue={query}
+            onSubmit={(s: string) => {
+              dispatch(updateQuery(s));
+            }}
+          />
+        </Box>
         <React.Fragment>{props.children}</React.Fragment>
       </Box>
     </div>

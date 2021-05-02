@@ -1,62 +1,31 @@
 import React from "react";
-import {
-  Box,
-  createStyles,
-  IconButton,
-  makeStyles,
-  Theme,
-} from "@material-ui/core";
-import { ArrowBack } from "@material-ui/icons";
+import { Box } from "@material-ui/core";
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router";
 import MediaCard from "../components/MediaCard/MediaCard";
-import SearchBar from "../components/SearchBar/SearchBar";
 import MenuLayout from "../layouts/MenuLayout";
 import { ROUTES } from "../routers";
 import { searchVideos } from "../store/actions/videos";
 import { IStore, IVideo } from "../utils/types";
 import { useQuery } from "../utils/hooks";
-
-const useStyles = makeStyles((theme: Theme) =>
-  createStyles({
-    iconButton: {
-      padding: 10,
-    },
-  })
-);
+import { updateQuery } from "../store/actions/query";
 
 export default function SearchResult() {
-  const classes = useStyles();
-
   const videos = useSelector((state: IStore) => state.videos);
   const dispatch = useDispatch();
 
   const history = useHistory();
   const query = useQuery().get("query");
-  console.log(query);
-  console.log("searchQuer");
+
   React.useEffect(() => {
-    if (query) dispatch(searchVideos(decodeURIComponent(query)));
+    if (query) {
+      dispatch(updateQuery(query));
+      dispatch(searchVideos(decodeURIComponent(query)));
+    }
   }, [dispatch, query]);
 
   return (
     <MenuLayout>
-      <Box display="flex" alignItems="center" style={{ gap: 8 }}>
-        <IconButton
-          aria-label="back"
-          className={classes.iconButton}
-          onClick={() => history.push(ROUTES.SEARCH)}
-        >
-          <ArrowBack />
-        </IconButton>
-        <SearchBar
-          defaultValue={decodeURIComponent(query || "")}
-          onSubmit={(s: string) => {
-            dispatch(searchVideos(s));
-          }}
-        />
-      </Box>
-
       <Box mt={3}>
         <Box
           display="grid"

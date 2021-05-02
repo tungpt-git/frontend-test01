@@ -39,6 +39,10 @@ export default function SearchBar(props: Props) {
   const classes = useStyles();
   const [text, setText] = React.useState(props.defaultValue || "");
 
+  React.useEffect(() => {
+    setText(props.defaultValue || "");
+  }, [props.defaultValue]);
+
   return (
     <Paper className={classes.root}>
       <IconButton className={classes.iconButton} aria-label="menu">
