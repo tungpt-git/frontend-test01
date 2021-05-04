@@ -1,9 +1,8 @@
 import { CircularProgress } from "@material-ui/core";
-import axios from "axios";
 import React from "react";
-import ReactPlayer from "react-player";
 import { useParams } from "react-router";
 import { getVideo } from "../../api";
+import VideoPlayer from "../../components/VideoPlayer/VideoPlayer";
 import MenuLayout from "../../layouts/MenuLayout";
 import { IVideo } from "../../utils/types";
 
@@ -24,11 +23,7 @@ export default function WatchVideo(props: Props) {
 
   return (
     <MenuLayout>
-      {!video ? (
-        <CircularProgress />
-      ) : (
-        <ReactPlayer controls pip={true} url={video.url} />
-      )}
+      {!video ? <CircularProgress /> : <VideoPlayer url={video.url} />}
     </MenuLayout>
   );
 }

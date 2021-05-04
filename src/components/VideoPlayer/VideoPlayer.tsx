@@ -8,12 +8,32 @@ import {
   Tooltip,
   Typography,
   withStyles,
+  IconButton,
 } from "@material-ui/core";
+import PlayerControls from "./PlayerControls";
+import { Pause, PlayArrow } from "@material-ui/icons";
+import { VimeoConfig } from "react-player/vimeo";
+
+const config = {
+  youtube: {
+    playerVars: {
+      playsinline: 0,
+      showInfo: 0,
+      control: 0,
+    },
+  },
+  vimeo: {
+    playerOptions: {
+      controls: false,
+    },
+  } as VimeoConfig,
+};
 
 const useStyle = makeStyles({
   playerWrapper: {
     position: "relative",
     width: "100%",
+    minHeight: 500,
   },
   controller: {
     position: "absolute",
@@ -26,6 +46,16 @@ const useStyle = makeStyles({
     flexDirection: "column",
     justifyContent: "space-between",
     zIndex: 1,
+  },
+  controllerIcons: {
+    color: "#777",
+    transform: "scale(0.9)",
+    height: 38,
+    width: 38,
+    "&:hover": {
+      color: "#fff",
+      transform: "scale(1)",
+    },
   },
 });
 
@@ -78,16 +108,33 @@ type Props = ReactPlayerProps;
 
 export default function VideoPlayer(props: Props) {
   const classes = useStyle();
+
+  const [state, setState] = React.useState({
+    playing: false,
+  });
+
+  const { playing } = state;
+
+  const handlePlayPause = () => {
+    setState({ ...state, playing: !playing });
+  };
+
   return (
     <Box className={classes.playerWrapper}>
-      <ReactPlayer {...props} width="100%" height="100%"></ReactPlayer>
+      <ReactPlayer
+        {...props}
+        style={{ position: "absolute" }}
+        width="100%"
+        height="100%"
+        playing={playing}
+        config={config}
+      />
       <Box className={classes.controller}>
         <Grid
           container
           direction="row"
           alignItems="center"
           justify="space-between"
-          style={{ padding: 16 }}
         >
           <Grid item>
             <Typography variant="h5" style={{ color: "#fff" }}>
@@ -95,6 +142,25 @@ export default function VideoPlayer(props: Props) {
             </Typography>
           </Grid>
         </Grid>
+        <Grid container direction="row" alignItems="center" justify="center">
+          <IconButton
+            className={classes.controllerIcons}
+            aria-label={playing ? "pause" : "play"}
+            onClick={handlePlayPause}
+          >
+            {playing ? (
+              <Pause fontSize="large" />
+            ) : (
+              <PlayArrow fontSize="large" />
+            )}
+          </IconButton>
+        </Grid>
+        <Grid
+          container
+          direction="row"
+          alignItems="center"
+          justify="space-between"
+        ></Grid>
       </Box>
     </Box>
   );

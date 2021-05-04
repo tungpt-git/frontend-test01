@@ -1,13 +1,17 @@
+import { ThemeProvider } from "@material-ui/styles";
 import "./App.css";
 import GlobalLayout from "./layouts/GlobalLayout";
 import { GlobalRoutes } from "./routers";
+import { theme } from "./theme";
 
 function App() {
   return (
     <div className="App">
-      <GlobalLayout>
-        <GlobalRoutes />
-      </GlobalLayout>
+      <ThemeProvider theme={theme}>
+        <GlobalLayout>
+          <GlobalRoutes />
+        </GlobalLayout>
+      </ThemeProvider>
     </div>
   );
 }
