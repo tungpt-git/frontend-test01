@@ -1,7 +1,10 @@
 import { createMuiTheme } from "@material-ui/core/styles";
 
-export default createMuiTheme({
+const theme = createMuiTheme({
   typography: {
-    fontFamily: ["Montserrat", "Roboto", "sans-serif"].join(","),
+    fontSize: 14,
+    fontFamily: ["OpenSans", "Arial", "sans-serif"].join(","),
   },
 });
+
+export default theme;

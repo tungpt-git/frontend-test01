@@ -1,7 +1,7 @@
-import React from "react";
+import React from 'react'
 
-type Props = any;
 
-export default function PlayerControls(props: Props) {
-  return null;
+export default function PlayerControls() {
+
+  return null
 }

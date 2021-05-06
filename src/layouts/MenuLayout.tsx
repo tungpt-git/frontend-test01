@@ -18,11 +18,10 @@ import {
 import { Box, IconButton } from "@material-ui/core";
 import { ArrowBack } from "@material-ui/icons";
 import SearchBar from "../components/SearchBar/SearchBar";
-import { useDispatch, useSelector } from "react-redux";
-import { searchVideos } from "../store/actions/videos";
-import { updateQuery } from "../store/actions/query";
+import {  useSelector } from "react-redux";
 import { IStore } from "../utils/types";
 import { useHistory } from "react-router";
+import { ROUTES } from "../routers";
 
 const drawerWidth = 240;
 
@@ -81,7 +80,6 @@ export default function MenuLayout(props: Props) {
 
   const history = useHistory();
 
-  const dispatch = useDispatch();
   const query = useSelector((state: IStore) => state.query);
   const drawer = (
     <div>
@@ -163,7 +161,9 @@ export default function MenuLayout(props: Props) {
           <SearchBar
             defaultValue={query}
             onSubmit={(s: string) => {
-              dispatch(updateQuery(s));
+              history.push(
+                ROUTES.SEARCH_RESULT + `?query=${encodeURIComponent(s)}`
+              );
             }}
           />
         </Box>
