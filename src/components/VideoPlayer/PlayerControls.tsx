@@ -121,6 +121,7 @@ const Controls = forwardRef(
       volume,
       onVolumeChange,
       onBookmark,
+      ...props
     }: any,
     ref: any
   ) => {
@@ -154,7 +155,7 @@ const Controls = forwardRef(
           >
             <Grid item>
               <Typography variant="h5" style={{ color: "#fff" }}>
-                Video Title
+                {props.title}
               </Typography>
             </Grid>
             <Grid item>
@@ -289,7 +290,7 @@ const Controls = forwardRef(
                 <Typography>{playbackRate}X</Typography>
               </Button>
 
-              {/* {ref && ref.current && (
+              {ref && ref.current && (
                 <Popover
                   container={ref.current}
                   open={open}
@@ -324,7 +325,7 @@ const Controls = forwardRef(
                     ))}
                   </Grid>
                 </Popover>
-              )} */}
+              )}
               <IconButton
                 onClick={onToggleFullScreen}
                 className={classes.bottomIcons}

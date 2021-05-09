@@ -19,6 +19,8 @@ export default function WatchVideo(props: Props) {
   const classes = useStyles();
   const { id } = useParams<{ id: string }>();
 
+  const playerRef = React.useRef<any>(null);
+
   const [video, setVideo] = React.useState<IVideo>();
 
   React.useEffect(() => {
@@ -37,7 +39,7 @@ export default function WatchVideo(props: Props) {
       ) : (
         <Grid container className={classes.wrapper} spacing={3}>
           <Grid item className={classes.videoPlayer} xs={12} sm={12} md={7}>
-            <VideoPlayer url={video.url} />
+            <VideoPlayer ref={playerRef} video={video} />
           </Grid>
           <Grid item xs={12} sm={12} md={5}>
             <Box
@@ -54,6 +56,7 @@ export default function WatchVideo(props: Props) {
                   item={item}
                   onClick={(item) => {
                     console.log(item);
+                    playerRef.current.seekTo(item.start / 100, "seconds");
                   }}
                 />
               ))}

@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, forwardRef } from "react";
 import Typography from "@material-ui/core/Typography";
 import ReactPlayer from "react-player";
 import { makeStyles, withStyles } from "@material-ui/core/styles";
@@ -6,6 +6,7 @@ import Grid from "@material-ui/core/Grid";
 import Paper from "@material-ui/core/Paper";
 import Controls from "./PlayerControls";
 import Box from "@material-ui/core/Box";
+import { IVideo } from "../../utils/types";
 
 const useStyles = makeStyles((theme) => ({
   playerWrapper: {
@@ -30,9 +31,11 @@ const format = (seconds: any) => {
 
 let count = 0;
 
-type Props = any;
+type Props = {
+  video: IVideo;
+};
 
-export default function VideoPlayer(props: Props) {
+const VideoPlayer = forwardRef(({ video, ...props }: Props, playerRef: any) => {
   const classes = useStyles();
   const [showControls, setShowControls] = useState(false);
   // const [count, setCount] = useState(0);
@@ -54,7 +57,7 @@ export default function VideoPlayer(props: Props) {
     seeking: false,
   });
 
-  const playerRef = useRef<any>(null);
+  // const playerRef = useRef<any>(null);
   const playerContainerRef = useRef<any>(null);
   const controlsRef = useRef<any>(null);
   const canvasRef = useRef<any>(null);
@@ -219,7 +222,7 @@ export default function VideoPlayer(props: Props) {
           ref={playerRef}
           width="100%"
           height={calcHeight()}
-          url={props.url}
+          url={video.url}
           pip={pip}
           playing={playing}
           controls={false}
@@ -240,6 +243,7 @@ export default function VideoPlayer(props: Props) {
 
         <Controls
           ref={controlsRef}
+          title={video.name}
           onSeek={handleSeekChange}
           onSeekMouseDown={handleSeekMouseDown}
           onSeekMouseUp={handleSeekMouseUp}
@@ -289,4 +293,6 @@ export default function VideoPlayer(props: Props) {
       <canvas ref={canvasRef} />
     </Box>
   );
-}
+});
+
+export default VideoPlayer;
