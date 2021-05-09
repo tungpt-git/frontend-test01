@@ -36,3 +36,17 @@
     transform: rotate(360deg);
   }
 }
+
+.player-wrapper {
+  width: auto;
+  height: auto;
+}
+
+.react-player {
+  padding-top: 56.25%;
+  position: relative;
+}
+
+.react-player > div {
+  position: absolute;
+}

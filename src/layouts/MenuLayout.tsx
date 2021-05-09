@@ -1,27 +1,35 @@
 import React, { PropsWithChildren } from "react";
-import Divider from "@material-ui/core/Divider";
-import Drawer from "@material-ui/core/Drawer";
-import Hidden from "@material-ui/core/Hidden";
-import InboxIcon from "@material-ui/icons/MoveToInbox";
-import List from "@material-ui/core/List";
-import ListItem from "@material-ui/core/ListItem";
-import ListItemIcon from "@material-ui/core/ListItemIcon";
-import ListItemText from "@material-ui/core/ListItemText";
-import MailIcon from "@material-ui/icons/Mail";
-
+import clsx from "clsx";
 import {
+  createStyles,
   makeStyles,
   useTheme,
   Theme,
-  createStyles,
 } from "@material-ui/core/styles";
-import { Box, IconButton } from "@material-ui/core";
+import Drawer from "@material-ui/core/Drawer";
+import AppBar from "@material-ui/core/AppBar";
+import Toolbar from "@material-ui/core/Toolbar";
+import List from "@material-ui/core/List";
+import CssBaseline from "@material-ui/core/CssBaseline";
+import Typography from "@material-ui/core/Typography";
+import Divider from "@material-ui/core/Divider";
+import IconButton from "@material-ui/core/IconButton";
+import MenuIcon from "@material-ui/icons/Menu";
+import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
+import ChevronRightIcon from "@material-ui/icons/ChevronRight";
+import ListItem from "@material-ui/core/ListItem";
+import ListItemIcon from "@material-ui/core/ListItemIcon";
+import ListItemText from "@material-ui/core/ListItemText";
+import InboxIcon from "@material-ui/icons/MoveToInbox";
+import MailIcon from "@material-ui/icons/Mail";
+import { Box } from "@material-ui/core";
 import { ArrowBack } from "@material-ui/icons";
 import SearchBar from "../components/SearchBar/SearchBar";
-import {  useSelector } from "react-redux";
-import { IStore } from "../utils/types";
-import { useHistory } from "react-router";
 import { ROUTES } from "../routers";
+import { useHistory } from "react-router";
+import { useSelector } from "react-redux";
+import { IStore } from "../utils/types";
+import MenuOpenIcon from "@material-ui/icons/MenuOpen";
 
 const drawerWidth = 240;
 
@@ -29,126 +37,145 @@ const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
       display: "flex",
-    },
-    drawer: {
-      [theme.breakpoints.up("sm")]: {
-        width: drawerWidth,
-        flexShrink: 0,
+      paper: {
+        overflowX: "hidden",
       },
     },
     appBar: {
-      [theme.breakpoints.up("sm")]: {
-        width: `calc(100% - ${drawerWidth}px)`,
-        marginLeft: drawerWidth,
-      },
+      zIndex: theme.zIndex.drawer + 1,
+      transition: theme.transitions.create(["width", "margin"], {
+        easing: theme.transitions.easing.sharp,
+        duration: theme.transitions.duration.leavingScreen,
+      }),
+    },
+    appBarShift: {
+      marginLeft: drawerWidth,
+      width: `calc(100% - ${drawerWidth}px)`,
+      transition: theme.transitions.create(["width", "margin"], {
+        easing: theme.transitions.easing.sharp,
+        duration: theme.transitions.duration.enteringScreen,
+      }),
     },
     menuButton: {
-      marginRight: theme.spacing(2),
+      marginRight: 36,
+    },
+    hide: {
+      display: "none",
+    },
+    drawer: {
+      position: "relative",
+      width: drawerWidth,
+      flexShrink: 0,
+      whiteSpace: "nowrap",
+    },
+    paper: {
+      overflowX: "hidden",
+    },
+    drawerOpen: {
+      width: drawerWidth,
+      transition: theme.transitions.create("width", {
+        easing: theme.transitions.easing.sharp,
+        duration: theme.transitions.duration.enteringScreen,
+      }),
+    },
+    drawerClose: {
+      transition: theme.transitions.create("width", {
+        easing: theme.transitions.easing.sharp,
+        duration: theme.transitions.duration.leavingScreen,
+      }),
+
+      width: theme.spacing(7) + 1,
       [theme.breakpoints.up("sm")]: {
-        display: "none",
+        width: theme.spacing(9) + 1,
       },
     },
-    // necessary for content to be below app bar
-    toolbar: theme.mixins.toolbar,
-    drawerPaper: {
-      width: drawerWidth,
+    toolbar: {
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "center",
+      padding: theme.spacing(0, 1),
+      position: "absolute",
+      bottom: 0,
+      textAlign: "center",
+      overflowX: "hidden",
+      width: "100%",
+      // necessary for content to be below app bar
+      ...theme.mixins.toolbar,
     },
     content: {
       flexGrow: 1,
-      padding: `${theme.spacing(5)}px ${theme.spacing(6)}px`,
+      padding: theme.spacing(3),
     },
-    iconButton: {
-      padding: 10,
-      margin: "0 10px",
+    menuIconClose: {
+      transform: "rotate(180deg)",
     },
   })
 );
 
-type Props = PropsWithChildren<{
-  window?: () => Window;
-}>;
+type Props = PropsWithChildren<{}>;
 
 export default function MenuLayout(props: Props) {
-  const { window } = props;
   const classes = useStyles();
   const theme = useTheme();
-  const [mobileOpen, setMobileOpen] = React.useState(false);
+  const history = useHistory();
+  const query = useSelector((state: IStore) => state.query);
+  const [open, setOpen] = React.useState(false);
 
-  const handleDrawerToggle = () => {
-    setMobileOpen(!mobileOpen);
+  const handleDrawerOpen = () => {
+    setOpen(true);
   };
 
-  const history = useHistory();
-
-  const query = useSelector((state: IStore) => state.query);
-  const drawer = (
-    <div>
-      <div className={classes.toolbar}>LOGO</div>
-      <Divider />
-      <List>
-        {["Inbox", "Starred", "Send email", "Drafts"].map((text, index) => (
-          <ListItem button key={text}>
-            <ListItemIcon>
-              {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-            </ListItemIcon>
-            <ListItemText primary={text} />
-          </ListItem>
-        ))}
-      </List>
-      <Divider />
-      <List>
-        {["All mail", "Trash", "Spam"].map((text, index) => (
-          <ListItem button key={text}>
-            <ListItemIcon>
-              {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-            </ListItemIcon>
-            <ListItemText primary={text} />
-          </ListItem>
-        ))}
-      </List>
-    </div>
-  );
-
-  const container =
-    window !== undefined
-      ? () => window().document.getElementById("root")
-      : undefined;
+  const handleDrawerClose = () => {
+    setOpen(false);
+  };
 
   return (
     <div className={classes.root}>
-      <nav className={classes.drawer} aria-label="mailbox folders">
-        {/* The implementation can be swapped with js to avoid SEO duplication of links. */}
-        <Hidden smUp implementation="css">
-          <Drawer
-            container={container}
-            variant="temporary"
-            anchor={theme.direction === "rtl" ? "right" : "left"}
-            open={mobileOpen}
-            onClose={handleDrawerToggle}
-            classes={{
-              paper: classes.drawerPaper,
-            }}
-            ModalProps={{
-              keepMounted: true, // Better open performance on mobile.
-            }}
-          >
-            {drawer}
-          </Drawer>
-        </Hidden>
-        <Hidden xsDown implementation="css">
-          <Drawer
-            classes={{
-              paper: classes.drawerPaper,
-            }}
-            variant="permanent"
-            open
-          >
-            {drawer}
-          </Drawer>
-        </Hidden>
-      </nav>
-
-      <Box className={classes.content}>
+      <CssBaseline />
+      <Drawer
+        variant="permanent"
+        className={clsx(classes.drawer, {
+          [classes.drawerOpen]: open,
+          [classes.drawerClose]: !open,
+        })}
+        classes={{
+          paper: clsx(classes.paper, {
+            [classes.drawerOpen]: open,
+            [classes.drawerClose]: !open,
+          }),
+        }}
+      >
+        <List>
+          {["Inbox", "Starred", "Send email", "Drafts"].map((text, index) => (
+            <ListItem button key={text}>
+              <ListItemIcon>
+                {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
+              </ListItemIcon>
+              <ListItemText primary={text} />
+            </ListItem>
+          ))}
+        </List>
+        <Divider />
+        <List>
+          {["All mail", "Trash", "Spam"].map((text, index) => (
+            <ListItem button key={text}>
+              <ListItemIcon>
+                {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
+              </ListItemIcon>
+              <ListItemText primary={text} />
+            </ListItem>
+          ))}
+        </List>
+        <Divider />
+        <div className={classes.toolbar}>
+          <IconButton onClick={open ? handleDrawerClose : handleDrawerOpen}>
+            <MenuOpenIcon
+              className={clsx({ [classes.menuIconClose]: !open })}
+            />
+          </IconButton>
+        </div>
+      </Drawer>
+      <main className={classes.content}>
         <Box display="flex" alignItems="center" style={{ gap: 8 }}>
           <IconButton
             aria-label="back"
@@ -168,7 +195,7 @@ export default function MenuLayout(props: Props) {
           />
         </Box>
         <React.Fragment>{props.children}</React.Fragment>
-      </Box>
+      </main>
     </div>
   );
 }

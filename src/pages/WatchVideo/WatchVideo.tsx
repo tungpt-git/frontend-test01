@@ -10,11 +10,8 @@ import { IVideo } from "../../utils/types";
 const useStyles = makeStyles({
   wrapper: {
     margin: "30px 0",
-    gap: "30px"
   },
-  videoPlayer: {
-    
-  },
+  videoPlayer: {},
 });
 
 type Props = any;
@@ -38,11 +35,11 @@ export default function WatchVideo(props: Props) {
       {!video ? (
         <CircularProgress />
       ) : (
-        <Grid container className={classes.wrapper} wrap="nowrap">
-          <Grid item className={classes.videoPlayer}>
+        <Grid container className={classes.wrapper} spacing={3}>
+          <Grid item className={classes.videoPlayer} xs={12} sm={12} md={7}>
             <VideoPlayer url={video.url} />
           </Grid>
-          <Grid item>
+          <Grid item xs={12} sm={12} md={5}>
             <Box
               style={{
                 overflowY: "auto",
