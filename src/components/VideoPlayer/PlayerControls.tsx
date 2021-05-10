@@ -63,11 +63,11 @@ const PrettoSlider = withStyles({
     height: 8,
   },
   thumb: {
-    height: 24,
-    width: 24,
+    height: 16,
+    width: 16,
     backgroundColor: "#fff",
     border: "2px solid currentColor",
-    marginTop: -8,
+    marginTop: -6,
     marginLeft: -12,
     "&:focus, &:hover, &$active": {
       boxShadow: "inherit",
@@ -78,11 +78,11 @@ const PrettoSlider = withStyles({
     left: "calc(-50% + 4px)",
   },
   track: {
-    height: 8,
+    height: 4,
     borderRadius: 4,
   },
   rail: {
-    height: 8,
+    height: 4,
     borderRadius: 4,
   },
 })(Slider);
@@ -158,7 +158,7 @@ const Controls = forwardRef(
                 {props.title}
               </Typography>
             </Grid>
-            <Grid item>
+            {/* <Grid item>
               <Button
                 onClick={onBookmark}
                 variant="contained"
@@ -167,7 +167,7 @@ const Controls = forwardRef(
               >
                 Bookmark
               </Button>
-            </Grid>
+            </Grid> */}
           </Grid>
           <Grid container direction="row" alignItems="center" justify="center">
             <IconButton

@@ -5,6 +5,7 @@ import { getVideo } from "../../api";
 import Segment from "../../components/Segment/Segment";
 import VideoPlayer from "../../components/VideoPlayer/VideoPlayer";
 import MenuLayout from "../../layouts/MenuLayout";
+import { useForceUpdate } from "../../utils/hooks";
 import { IVideo } from "../../utils/types";
 
 const useStyles = makeStyles({
@@ -18,6 +19,7 @@ type Props = any;
 export default function WatchVideo(props: Props) {
   const classes = useStyles();
   const { id } = useParams<{ id: string }>();
+  const forceUpdate = useForceUpdate();
 
   const playerRef = React.useRef<any>(null);
 
@@ -32,6 +34,17 @@ export default function WatchVideo(props: Props) {
     fetchVideo(id);
   }, [id]);
 
+  React.useEffect(() => {
+    const r = setInterval(() => {
+      forceUpdate();
+    }, 500);
+
+    return () => clearInterval(r);
+  });
+
+  const currentTime: number = Math.ceil(
+    (playerRef?.current?.getCurrentTime() || 0) * 100
+  );
   return (
     <MenuLayout>
       {!video ? (
@@ -45,7 +58,7 @@ export default function WatchVideo(props: Props) {
             <Box
               style={{
                 overflowY: "auto",
-                maxHeight: 800,
+                maxHeight: 500,
                 border: "1px solid #eee",
                 padding: "12px",
               }}
@@ -54,8 +67,8 @@ export default function WatchVideo(props: Props) {
                 <Segment
                   key={index}
                   item={item}
+                  active={currentTime >= item.start && currentTime < item.end}
                   onClick={(item) => {
-                    console.log(item);
                     playerRef.current.seekTo(item.start / 100, "seconds");
                   }}
                 />

@@ -37,9 +37,7 @@ type Props = {
 
 const VideoPlayer = forwardRef(({ video, ...props }: Props, playerRef: any) => {
   const classes = useStyles();
-  const [showControls, setShowControls] = useState(false);
-  // const [count, setCount] = useState(0);
-  const [anchorEl, setAnchorEl] = React.useState(null);
+  
   const [timeDisplayFormat, setTimeDisplayFormat] = React.useState("normal");
   const [bookmarks, setBookmarks] = useState<any>([]);
   const [state, setState] = useState({
@@ -48,7 +46,7 @@ const VideoPlayer = forwardRef(({ video, ...props }: Props, playerRef: any) => {
     controls: false,
     light: false,
 
-    muted: true,
+    muted: false,
     played: 0,
     duration: 0,
     playbackRate: 1.0,
@@ -143,7 +141,6 @@ const VideoPlayer = forwardRef(({ video, ...props }: Props, playerRef: any) => {
   };
 
   const handleMouseMove = () => {
-    console.log("mousemove");
     controlsRef.current.style.visibility = "visible";
     count = 0;
   };
@@ -199,6 +196,7 @@ const VideoPlayer = forwardRef(({ video, ...props }: Props, playerRef: any) => {
 
   const duration =
     playerRef && playerRef.current ? playerRef.current.getDuration() : "00:00";
+
   const elapsedTime =
     timeDisplayFormat == "normal"
       ? format(currentTime)
