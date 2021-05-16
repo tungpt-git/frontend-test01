@@ -26,24 +26,31 @@ export default function SearchResult() {
 
   return (
     <MenuLayout>
-      <Box mt={3}>
-        <Box
+      <Box>
+        {/* <Box
           display="grid"
           gridGap={24}
           gridTemplateColumns={`repeat(auto-fill, minmax(360px, 1fr))`}
-        >
-          {videos.map((video: IVideo, index: number) => (
-            <React.Fragment key={index}>
-              <MediaCard
-                video={video}
-                onPlay={() => {
-                  history.push(ROUTES.VIDEO.replace(":id", video.uid));
-                }}
-              />
-            </React.Fragment>
-          ))}
-        </Box>
+        > */}
+        {videos.map((video: IVideo, index: number) => (
+          <Box key={index} mt={3}>
+            <MediaCard
+              video={video}
+              onPlay={() => {
+                history.push(ROUTES.VIDEO.replace(":id", video.uid));
+              }}
+              onSegmentClick={(segment) => {
+                history.push(
+                  `${ROUTES.VIDEO.replace(":id", video.uid)}?start=${
+                    segment.start
+                  }`
+                );
+              }}
+            />
+          </Box>
+        ))}
       </Box>
+      {/* </Box> */}
     </MenuLayout>
   );
 }

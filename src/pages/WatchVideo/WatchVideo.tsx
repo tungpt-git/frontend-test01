@@ -5,7 +5,7 @@ import { getVideo } from "../../api";
 import Segment from "../../components/Segment/Segment";
 import VideoPlayer from "../../components/VideoPlayer/VideoPlayer";
 import MenuLayout from "../../layouts/MenuLayout";
-import { useForceUpdate } from "../../utils/hooks";
+import { useForceUpdate, useQuery } from "../../utils/hooks";
 import { IVideo } from "../../utils/types";
 
 const useStyles = makeStyles({
@@ -19,6 +19,8 @@ type Props = any;
 export default function WatchVideo(props: Props) {
   const classes = useStyles();
   const { id } = useParams<{ id: string }>();
+  const start = useQuery().get("start");
+  console.log(start);
   const forceUpdate = useForceUpdate();
 
   const playerRef = React.useRef<any>(null);
@@ -35,6 +37,12 @@ export default function WatchVideo(props: Props) {
   }, [id]);
 
   React.useEffect(() => {
+    if (start && playerRef?.current) {
+      playerRef?.current?.seekTo(+start / 100, "seconds");
+    }
+  }, [start, playerRef?.current]);
+
+  React.useEffect(() => {
     const r = setInterval(() => {
       forceUpdate();
     }, 500);
@@ -45,6 +53,7 @@ export default function WatchVideo(props: Props) {
   const currentTime: number = Math.ceil(
     (playerRef?.current?.getCurrentTime() || 0) * 100
   );
+
   return (
     <MenuLayout>
       {!video ? (
@@ -52,7 +61,7 @@ export default function WatchVideo(props: Props) {
       ) : (
         <Grid container className={classes.wrapper} spacing={3}>
           <Grid item className={classes.videoPlayer} xs={12} sm={12} md={7}>
-            <VideoPlayer ref={playerRef} video={video} />
+            <VideoPlayer ref={playerRef} video={video} start={start} />
           </Grid>
           <Grid item xs={12} sm={12} md={5}>
             <Box

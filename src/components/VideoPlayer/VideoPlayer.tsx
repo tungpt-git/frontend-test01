@@ -33,264 +33,273 @@ let count = 0;
 
 type Props = {
   video: IVideo;
+  onReady?(): void;
+  start: string | null;
 };
 
-const VideoPlayer = forwardRef(({ video, ...props }: Props, playerRef: any) => {
-  const classes = useStyles();
-  
-  const [timeDisplayFormat, setTimeDisplayFormat] = React.useState("normal");
-  const [bookmarks, setBookmarks] = useState<any>([]);
-  const [state, setState] = useState({
-    pip: false,
-    playing: false,
-    controls: false,
-    light: false,
+const VideoPlayer = forwardRef(
+  ({ video, start = null, ...props }: Props, playerRef: any) => {
+    const classes = useStyles();
 
-    muted: false,
-    played: 0,
-    duration: 0,
-    playbackRate: 1.0,
-    volume: 1,
-    loop: false,
-    seeking: false,
-  });
+    const [timeDisplayFormat, setTimeDisplayFormat] = React.useState("normal");
+    const [bookmarks, setBookmarks] = useState<any>([]);
+    const [state, setState] = useState({
+      pip: false,
+      playing: !!start,
+      controls: false,
+      light: false,
 
-  // const playerRef = useRef<any>(null);
-  const playerContainerRef = useRef<any>(null);
-  const controlsRef = useRef<any>(null);
-  const canvasRef = useRef<any>(null);
-  const {
-    playing,
-    controls,
-    light,
+      muted: false,
+      played: 0,
+      duration: 0,
+      playbackRate: 1.0,
+      volume: 1,
+      loop: false,
+      seeking: false,
+    });
 
-    muted,
-    loop,
-    playbackRate,
-    pip,
-    played,
-    seeking,
-    volume,
-  } = state;
+    // const playerRef = useRef<any>(null);
+    const playerContainerRef = useRef<any>(null);
+    const controlsRef = useRef<any>(null);
+    const canvasRef = useRef<any>(null);
+    const {
+      playing,
+      controls,
+      light,
 
-  const handlePlayPause = () => {
-    setState({ ...state, playing: !state.playing });
-  };
+      muted,
+      loop,
+      playbackRate,
+      pip,
+      played,
+      seeking,
+      volume,
+    } = state;
 
-  const handleRewind = () => {
-    if (!playerRef?.current) return;
-    playerRef.current.seekTo(playerRef.current.getCurrentTime() - 10);
-  };
+    const handlePlayPause = () => {
+      setState({ ...state, playing: !state.playing });
+    };
 
-  const handleFastForward = () => {
-    if (!playerRef?.current) return;
-    playerRef.current.seekTo(playerRef.current.getCurrentTime() + 10);
-  };
+    const handleRewind = () => {
+      if (!playerRef?.current) return;
+      playerRef.current.seekTo(playerRef.current.getCurrentTime() - 10);
+    };
 
-  const handleProgress = (changeState: any) => {
-    if (count > 3) {
+    const handleFastForward = () => {
+      if (!playerRef?.current) return;
+      playerRef.current.seekTo(playerRef.current.getCurrentTime() + 10);
+    };
+
+    const handleProgress = (changeState: any) => {
+      if (count > 3) {
+        controlsRef.current.style.visibility = "hidden";
+        count = 0;
+      }
+      if (controlsRef.current.style.visibility == "visible") {
+        count += 1;
+      }
+      if (!state.seeking) {
+        setState({ ...state, ...changeState });
+      }
+    };
+
+    const handleSeekChange = (e: any, newValue: any) => {
+      console.log({ newValue });
+      setState({ ...state, played: parseFloat(`${newValue / 100}`) });
+    };
+
+    const handleSeekMouseDown = (e: any) => {
+      setState({ ...state, seeking: true });
+    };
+
+    const handleSeekMouseUp = (e: any, newValue: any) => {
+      console.log({ value: e.target });
+      setState({ ...state, seeking: false });
+      // console.log(sliderRef.current.value)
+      playerRef.current.seekTo(newValue / 100, "fraction");
+    };
+
+    const handleDuration = (duration: any) => {
+      setState({ ...state, duration });
+    };
+
+    const handleVolumeSeekDown = (e: any, newValue: any) => {
+      setState({
+        ...state,
+        seeking: false,
+        volume: parseFloat(`${newValue / 100}`),
+      });
+    };
+    const handleVolumeChange = (e: any, newValue: any) => {
+      // console.log(newValue);
+      setState({
+        ...state,
+        volume: parseFloat(`${newValue / 100}`),
+        muted: newValue === 0 ? true : false,
+      });
+    };
+
+    const toggleFullScreen = () => {
+      // screenful.toggle(playerContainerRef.current);
+    };
+
+    const handleMouseMove = () => {
+      controlsRef.current.style.visibility = "visible";
+      count = 0;
+    };
+
+    const hanldeMouseLeave = () => {
       controlsRef.current.style.visibility = "hidden";
       count = 0;
-    }
-    if (controlsRef.current.style.visibility == "visible") {
-      count += 1;
-    }
-    if (!state.seeking) {
-      setState({ ...state, ...changeState });
-    }
-  };
+    };
 
-  const handleSeekChange = (e: any, newValue: any) => {
-    console.log({ newValue });
-    setState({ ...state, played: parseFloat(`${newValue / 100}`) });
-  };
+    const handleDisplayFormat = () => {
+      setTimeDisplayFormat(
+        timeDisplayFormat == "normal" ? "remaining" : "normal"
+      );
+    };
 
-  const handleSeekMouseDown = (e: any) => {
-    setState({ ...state, seeking: true });
-  };
+    const handlePlaybackRate = (rate: any) => {
+      setState({ ...state, playbackRate: rate });
+    };
 
-  const handleSeekMouseUp = (e: any, newValue: any) => {
-    console.log({ value: e.target });
-    setState({ ...state, seeking: false });
-    // console.log(sliderRef.current.value)
-    playerRef.current.seekTo(newValue / 100, "fraction");
-  };
+    const hanldeMute = () => {
+      setState({ ...state, muted: !state.muted });
+    };
 
-  const handleDuration = (duration: any) => {
-    setState({ ...state, duration });
-  };
+    const addBookmark = () => {
+      const canvas = canvasRef.current;
+      canvas.width = 160;
+      canvas.height = 90;
+      const ctx = canvas.getContext("2d");
 
-  const handleVolumeSeekDown = (e: any, newValue: any) => {
-    setState({
-      ...state,
-      seeking: false,
-      volume: parseFloat(`${newValue / 100}`),
-    });
-  };
-  const handleVolumeChange = (e: any, newValue: any) => {
-    // console.log(newValue);
-    setState({
-      ...state,
-      volume: parseFloat(`${newValue / 100}`),
-      muted: newValue === 0 ? true : false,
-    });
-  };
+      ctx.drawImage(
+        playerRef.current.getInternalPlayer(),
+        0,
+        0,
+        canvas.width,
+        canvas.height
+      );
+      const dataUri = canvas.toDataURL();
+      canvas.width = 0;
+      canvas.height = 0;
+      const bookmarksCopy = [...bookmarks];
+      bookmarksCopy.push({
+        time: playerRef.current.getCurrentTime() as any,
+        display: format(playerRef.current.getCurrentTime()) as any,
+        image: dataUri as any,
+      });
+      setBookmarks(bookmarksCopy);
+    };
 
-  const toggleFullScreen = () => {
-    // screenful.toggle(playerContainerRef.current);
-  };
+    const currentTime =
+      playerRef && playerRef.current
+        ? playerRef.current.getCurrentTime()
+        : "00:00";
 
-  const handleMouseMove = () => {
-    controlsRef.current.style.visibility = "visible";
-    count = 0;
-  };
+    const duration =
+      playerRef && playerRef.current
+        ? playerRef.current.getDuration()
+        : "00:00";
 
-  const hanldeMouseLeave = () => {
-    controlsRef.current.style.visibility = "hidden";
-    count = 0;
-  };
+    const elapsedTime =
+      timeDisplayFormat == "normal"
+        ? format(currentTime)
+        : `-${format(duration - currentTime)}`;
 
-  const handleDisplayFormat = () => {
-    setTimeDisplayFormat(
-      timeDisplayFormat == "normal" ? "remaining" : "normal"
-    );
-  };
+    const totalDuration = format(duration);
 
-  const handlePlaybackRate = (rate: any) => {
-    setState({ ...state, playbackRate: rate });
-  };
+    const calcHeight = React.useCallback(() => {
+      return `${(playerRef?.current?.wrapper.offsetWidth || 0) / 1.78}px`;
+    }, [playerRef?.current]);
 
-  const hanldeMute = () => {
-    setState({ ...state, muted: !state.muted });
-  };
-
-  const addBookmark = () => {
-    const canvas = canvasRef.current;
-    canvas.width = 160;
-    canvas.height = 90;
-    const ctx = canvas.getContext("2d");
-
-    ctx.drawImage(
-      playerRef.current.getInternalPlayer(),
-      0,
-      0,
-      canvas.width,
-      canvas.height
-    );
-    const dataUri = canvas.toDataURL();
-    canvas.width = 0;
-    canvas.height = 0;
-    const bookmarksCopy = [...bookmarks];
-    bookmarksCopy.push({
-      time: playerRef.current.getCurrentTime() as any,
-      display: format(playerRef.current.getCurrentTime()) as any,
-      image: dataUri as any,
-    });
-    setBookmarks(bookmarksCopy);
-  };
-
-  const currentTime =
-    playerRef && playerRef.current
-      ? playerRef.current.getCurrentTime()
-      : "00:00";
-
-  const duration =
-    playerRef && playerRef.current ? playerRef.current.getDuration() : "00:00";
-
-  const elapsedTime =
-    timeDisplayFormat == "normal"
-      ? format(currentTime)
-      : `-${format(duration - currentTime)}`;
-
-  const totalDuration = format(duration);
-
-  const calcHeight = React.useCallback(() => {
-    return `${(playerRef?.current?.wrapper.offsetWidth || 0) / 1.78}px`;
-  }, [playerRef?.current]);
-
-  return (
-    <Box>
-      <div
-        onMouseMove={handleMouseMove}
-        onMouseLeave={hanldeMouseLeave}
-        ref={playerContainerRef}
-        className={classes.playerWrapper}
-      >
-        <ReactPlayer
-          ref={playerRef}
-          width="100%"
-          height={calcHeight()}
-          url={video.url}
-          pip={pip}
-          playing={playing}
-          controls={false}
-          light={light}
-          loop={loop}
-          playbackRate={playbackRate}
-          volume={volume}
-          muted={muted}
-          onProgress={handleProgress}
-          config={{
-            file: {
-              attributes: {
-                crossorigin: "anonymous",
+    return (
+      <Box>
+        <div
+          onMouseMove={handleMouseMove}
+          onMouseLeave={hanldeMouseLeave}
+          ref={playerContainerRef}
+          className={classes.playerWrapper}
+        >
+          <ReactPlayer
+            ref={playerRef}
+            width="100%"
+            height={calcHeight()}
+            url={video.url}
+            pip={pip}
+            playing={playing}
+            controls={false}
+            light={light}
+            loop={loop}
+            playbackRate={playbackRate}
+            volume={volume}
+            muted={muted}
+            onProgress={handleProgress}
+            onReady={() => {
+              props.onReady && props.onReady();
+            }}
+            config={{
+              file: {
+                attributes: {
+                  crossOrigin: "anonymous",
+                },
               },
-            },
-          }}
-        />
+            }}
+          />
 
-        <Controls
-          ref={controlsRef}
-          title={video.name}
-          onSeek={handleSeekChange}
-          onSeekMouseDown={handleSeekMouseDown}
-          onSeekMouseUp={handleSeekMouseUp}
-          onDuration={handleDuration}
-          onRewind={handleRewind}
-          onPlayPause={handlePlayPause}
-          onFastForward={handleFastForward}
-          playing={playing}
-          played={played}
-          elapsedTime={elapsedTime}
-          totalDuration={totalDuration}
-          onMute={hanldeMute}
-          muted={muted}
-          onVolumeChange={handleVolumeChange}
-          onVolumeSeekDown={handleVolumeSeekDown}
-          onChangeDispayFormat={handleDisplayFormat}
-          playbackRate={playbackRate}
-          onPlaybackRateChange={handlePlaybackRate}
-          onToggleFullScreen={toggleFullScreen}
-          volume={volume}
-          onBookmark={addBookmark}
-        />
-      </div>
+          <Controls
+            ref={controlsRef}
+            title={video.name}
+            onSeek={handleSeekChange}
+            onSeekMouseDown={handleSeekMouseDown}
+            onSeekMouseUp={handleSeekMouseUp}
+            onDuration={handleDuration}
+            onRewind={handleRewind}
+            onPlayPause={handlePlayPause}
+            onFastForward={handleFastForward}
+            playing={playing}
+            played={played}
+            elapsedTime={elapsedTime}
+            totalDuration={totalDuration}
+            onMute={hanldeMute}
+            muted={muted}
+            onVolumeChange={handleVolumeChange}
+            onVolumeSeekDown={handleVolumeSeekDown}
+            onChangeDispayFormat={handleDisplayFormat}
+            playbackRate={playbackRate}
+            onPlaybackRateChange={handlePlaybackRate}
+            onToggleFullScreen={toggleFullScreen}
+            volume={volume}
+            onBookmark={addBookmark}
+          />
+        </div>
 
-      <Grid container style={{ marginTop: 20 }} spacing={3}>
-        {bookmarks.map((bookmark: any, index: number) => (
-          <Grid key={index} item>
-            <Paper
-              onClick={() => {
-                playerRef.current.seekTo(bookmark.time);
-                controlsRef.current.style.visibility = "visible";
+        <Grid container style={{ marginTop: 20 }} spacing={3}>
+          {bookmarks.map((bookmark: any, index: number) => (
+            <Grid key={index} item>
+              <Paper
+                onClick={() => {
+                  playerRef.current.seekTo(bookmark.time);
+                  controlsRef.current.style.visibility = "visible";
 
-                setTimeout(() => {
-                  controlsRef.current.style.visibility = "hidden";
-                }, 1000);
-              }}
-              elevation={3}
-            >
-              <img crossOrigin="anonymous" src={bookmark.image} />
-              <Typography variant="body2" align="center">
-                bookmark at {bookmark.display}
-              </Typography>
-            </Paper>
-          </Grid>
-        ))}
-      </Grid>
-      <canvas ref={canvasRef} />
-    </Box>
-  );
-});
+                  setTimeout(() => {
+                    controlsRef.current.style.visibility = "hidden";
+                  }, 1000);
+                }}
+                elevation={3}
+              >
+                <img crossOrigin="anonymous" src={bookmark.image} />
+                <Typography variant="body2" align="center">
+                  bookmark at {bookmark.display}
+                </Typography>
+              </Paper>
+            </Grid>
+          ))}
+        </Grid>
+        <canvas ref={canvasRef} />
+      </Box>
+    );
+  }
+);
 
 export default VideoPlayer;

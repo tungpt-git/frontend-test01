@@ -6,9 +6,11 @@ import CardMedia from "@material-ui/core/CardMedia";
 import IconButton from "@material-ui/core/IconButton";
 import Typography from "@material-ui/core/Typography";
 import PlayArrowIcon from "@material-ui/icons/PlayArrow";
-import { IVideo } from "../../utils/types";
+import { ISegment, IVideo } from "../../utils/types";
 import moment from "moment";
-import { Box } from "@material-ui/core";
+import { Box, Chip } from "@material-ui/core";
+import { milisec2Minutes } from "../../utils/helpers";
+import Segment from "../Segment/Segment";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -30,7 +32,7 @@ const useStyles = makeStyles((theme: Theme) =>
       flex: "1 0 auto",
     },
     cover: {
-      width: 180,
+      width: 540,
       position: "relative",
       "&:hover": {
         // opacity: 0.3,
@@ -70,9 +72,10 @@ const useStyles = makeStyles((theme: Theme) =>
 type Props = {
   video: IVideo;
   onPlay(): void;
+  onSegmentClick?(item: ISegment): void;
 };
 
-export default function MediaControlCard({ video, onPlay }: Props) {
+export default function MediaControlCard({ video, onPlay, ...props }: Props) {
   const classes = useStyles();
 
   return (
@@ -96,12 +99,25 @@ export default function MediaControlCard({ video, onPlay }: Props) {
             variant="h5"
             title={video.name}
             onClick={onPlay}
+            style={{ cursor: "pointer" }}
           >
             {video.name}
           </Typography>
           <Typography variant="body2" color="textSecondary">
             {moment(video.uploadedDate).fromNow()}
           </Typography>
+          <Box mt={1} style={{ maxHeight: 200, overflowY: "auto" }}>
+            {video.segments.map((item, index) => (
+              <Box key={index} display="flex">
+                <Segment
+                  item={item}
+                  onClick={() => {
+                    props.onSegmentClick && props.onSegmentClick(item);
+                  }}
+                />
+              </Box>
+            ))}
+          </Box>
         </CardContent>
       </div>
     </Card>

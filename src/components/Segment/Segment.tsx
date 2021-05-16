@@ -1,5 +1,12 @@
-import { Box, Grid, makeStyles, Typography } from "@material-ui/core";
 import React from "react";
+import {
+  Box,
+  Chip,
+  Grid,
+  makeStyles,
+  Typography,
+  withStyles,
+} from "@material-ui/core";
 import { milisec2Minutes } from "../../utils/helpers";
 import { ISegment } from "../../utils/types";
 import clsx from "clsx";
@@ -7,10 +14,9 @@ import clsx from "clsx";
 const useStyles = makeStyles({
   wrapper: {
     display: "flex",
-    alignItems: "start",
+    alignItems: "center",
   },
   item: {
-    padding: "4px 0",
     marginRight: "12px",
     cursor: "pointer",
   },
@@ -29,7 +35,7 @@ const useStyles = makeStyles({
 type Props = {
   item: ISegment;
   onClick(item: ISegment): void;
-  active: boolean;
+  active?: boolean;
 };
 
 export default function Segment({ item, active, ...props }: Props) {
@@ -38,9 +44,15 @@ export default function Segment({ item, active, ...props }: Props) {
   return (
     <Grid container className={classes.wrapper}>
       <Grid item className={classes.item} onClick={() => props.onClick(item)}>
-        <Typography>
-          {milisec2Minutes(item.start * 10)} - {milisec2Minutes(item.end * 10)}
-        </Typography>
+        <Chip
+          variant={"outlined"}
+          size="small"
+          color="primary"
+          label={`${milisec2Minutes(item.start * 10)} - ${milisec2Minutes(
+            item.end * 10
+          )}`}
+          style={{ cursor: "pointer" }}
+        />
       </Grid>
       <Grid
         item
