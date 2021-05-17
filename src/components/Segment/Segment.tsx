@@ -1,12 +1,5 @@
 import React from "react";
-import {
-  Box,
-  Chip,
-  Grid,
-  makeStyles,
-  Typography,
-  withStyles,
-} from "@material-ui/core";
+import { Box, Chip, Grid, makeStyles, Typography } from "@material-ui/core";
 import { milisec2Minutes } from "../../utils/helpers";
 import { ISegment } from "../../utils/types";
 import clsx from "clsx";
@@ -14,7 +7,6 @@ import clsx from "clsx";
 const useStyles = makeStyles({
   wrapper: {
     display: "flex",
-    alignItems: "center",
   },
   item: {
     marginRight: "12px",
@@ -48,10 +40,10 @@ export default function Segment({ item, active, ...props }: Props) {
           variant={"outlined"}
           size="small"
           color="primary"
+          style={{ cursor: "pointer" }}
           label={`${milisec2Minutes(item.start * 10)} - ${milisec2Minutes(
             item.end * 10
           )}`}
-          style={{ cursor: "pointer" }}
         />
       </Grid>
       <Grid

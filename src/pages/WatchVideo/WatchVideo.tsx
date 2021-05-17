@@ -73,14 +73,15 @@ export default function WatchVideo(props: Props) {
               }}
             >
               {video.segments.map((item, index) => (
-                <Segment
-                  key={index}
-                  item={item}
-                  active={currentTime >= item.start && currentTime < item.end}
-                  onClick={(item) => {
-                    playerRef.current.seekTo(item.start / 100, "seconds");
-                  }}
-                />
+                <Box key={index} mt={1}>
+                  <Segment
+                    item={item}
+                    active={currentTime >= item.start && currentTime < item.end}
+                    onClick={(item) => {
+                      playerRef.current.seekTo(item.start / 100, "seconds");
+                    }}
+                  />
+                </Box>
               ))}
             </Box>
           </Grid>

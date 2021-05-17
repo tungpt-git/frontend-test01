@@ -8,8 +8,7 @@ import Typography from "@material-ui/core/Typography";
 import PlayArrowIcon from "@material-ui/icons/PlayArrow";
 import { ISegment, IVideo } from "../../utils/types";
 import moment from "moment";
-import { Box, Chip } from "@material-ui/core";
-import { milisec2Minutes } from "../../utils/helpers";
+import { Box } from "@material-ui/core";
 import Segment from "../Segment/Segment";
 
 const useStyles = makeStyles((theme: Theme) =>
