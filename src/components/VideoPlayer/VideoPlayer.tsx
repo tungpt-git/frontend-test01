@@ -1,7 +1,7 @@
 import React, { useState, useRef, forwardRef } from "react";
 import Typography from "@material-ui/core/Typography";
 import ReactPlayer from "react-player";
-import { makeStyles, withStyles } from "@material-ui/core/styles";
+import { makeStyles } from "@material-ui/core/styles";
 import Grid from "@material-ui/core/Grid";
 import Paper from "@material-ui/core/Paper";
 import Controls from "./PlayerControls";

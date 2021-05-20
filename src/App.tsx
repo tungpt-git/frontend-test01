@@ -5,6 +5,7 @@ import { GlobalRoutes } from "./routers";
 import { theme } from "./theme";
 
 function App() {
+  console.log(theme)
   return (
     <div className="App">
       <ThemeProvider theme={theme}>

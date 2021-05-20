@@ -1,16 +1,23 @@
 import React from "react";
-import { Box, Chip, Grid, makeStyles, Typography } from "@material-ui/core";
+import {
+  Box,
+  Chip,
+  Grid,
+  makeStyles,
+  Theme,
+  Typography,
+} from "@material-ui/core";
 import { milisec2Minutes } from "../../utils/helpers";
 import { ISegment } from "../../utils/types";
 import clsx from "clsx";
 
-const useStyles = makeStyles({
+const useStyles = makeStyles((theme: Theme) => ({
   wrapper: {
     display: "flex",
   },
   item: {
-    marginRight: "12px",
     cursor: "pointer",
+    marginRight: 10,
   },
   active: {
     backgroundColor: `rgba(42,181,115,.15)`,
@@ -19,10 +26,28 @@ const useStyles = makeStyles({
   text: {
     display: "inline-block",
     "&:hover": {
-      background: "#ddd",
+      background: `${theme.palette.grey[200]}`,
+      $textIcon: {
+        opacity: 1,
+      },
     },
   },
-});
+  textWrapper: {
+    position: "relative",
+    padding: "0 10px",
+    "&:hover $textIcon": {
+      opacity: 1,
+    },
+  },
+
+  textIcon: {
+    position: "absolute",
+    right: "-10px",
+    top: "50%",
+    transform: "translateY(-50%)",
+    opacity: 0,
+  },
+}));
 
 type Props = {
   item: ISegment;
@@ -59,6 +84,7 @@ export default function Segment({ item, active, ...props }: Props) {
         >
           <Typography>{item.text}</Typography>
         </Box>
+        <Box></Box>
       </Grid>
     </Grid>
   );

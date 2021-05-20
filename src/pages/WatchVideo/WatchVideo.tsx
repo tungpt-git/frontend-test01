@@ -20,7 +20,6 @@ export default function WatchVideo(props: Props) {
   const classes = useStyles();
   const { id } = useParams<{ id: string }>();
   const start = useQuery().get("start");
-  console.log(start);
   const forceUpdate = useForceUpdate();
 
   const playerRef = React.useRef<any>(null);
@@ -53,6 +52,7 @@ export default function WatchVideo(props: Props) {
   const currentTime: number = Math.ceil(
     (playerRef?.current?.getCurrentTime() || 0) * 100
   );
+  console.log("currentTime", currentTime);
 
   return (
     <MenuLayout>

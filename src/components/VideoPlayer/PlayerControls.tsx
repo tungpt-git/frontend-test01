@@ -1,9 +1,8 @@
-import React, { forwardRef, useState } from "react";
+import React, { forwardRef } from "react";
 import Typography from "@material-ui/core/Typography";
 import { makeStyles, withStyles } from "@material-ui/core/styles";
 import Button from "@material-ui/core/Button";
 import IconButton from "@material-ui/core/IconButton";
-import BookmarkIcon from "@material-ui/icons/Bookmark";
 import FastRewindIcon from "@material-ui/icons/FastRewind";
 import FastForwardIcon from "@material-ui/icons/FastForward";
 import PlayArrowIcon from "@material-ui/icons/PlayArrow";
