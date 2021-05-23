@@ -6,6 +6,7 @@ import {
   Redirect,
 } from "react-router-dom";
 import { ROUTES } from ".";
+import { AudioPlayerLayout } from "../layouts";
 import { Search, SearchResult, WatchVideo } from "../pages";
 
 export default function GlobalRouters() {
@@ -17,7 +18,9 @@ export default function GlobalRouters() {
           <Search />
         </Route>
         <Route exact path={ROUTES.SEARCH_RESULT}>
-          <SearchResult />
+          <AudioPlayerLayout>
+            <SearchResult />
+          </AudioPlayerLayout>
         </Route>
         <Route exact path={ROUTES.VIDEO}>
           <WatchVideo />

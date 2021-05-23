@@ -1,18 +1,21 @@
 import { Box, Grid, Slider, withStyles } from "@material-ui/core";
 import React from "react";
-import "./AudioPlayer.css";
-import PlayCircleOutlineIcon from "@material-ui/icons/PlayCircleOutline";
+import PlayCircleIcon from "@material-ui/icons/PlayCircleFilled";
 import SkipPreviousIcon from "@material-ui/icons/SkipPrevious";
 import SkipNextIcon from "@material-ui/icons/SkipNext";
 import ShuffleIcon from "@material-ui/icons/Shuffle";
 import RepeatIcon from "@material-ui/icons/Repeat";
 import VolumeDownIcon from "@material-ui/icons/VolumeDown";
-import PauseCircleOutlineIcon from "@material-ui/icons/PauseCircleOutline";
+import PauseCircleIcon from "@material-ui/icons/PauseCircleFilled";
 import PlaylistPlayIcon from "@material-ui/icons/PlaylistPlay";
 import { milisec2Minutes } from "../../utils/helpers";
 import { debounce } from "lodash";
+import { useStyles } from "./styles";
+import clsx from "clsx";
 
 const AudioPlayer = () => {
+  const classes = useStyles();
+
   const audioRef = React.useRef<any>();
 
   const [playing, setPlaying] = React.useState(false);
@@ -68,51 +71,61 @@ const AudioPlayer = () => {
           setCurrentTime(audioRef.current.currentTime);
         }}
       ></audio>
-      <Box className="audio">
-        <Box className="audio__left">
+      <Box className={classes["audio"]}>
+        <Box className={classes["audio__left"]}>
           <img
-            className="audio__albumLogo"
+            className={classes["audio__albumLogo"]}
             src={
               "https://img.sparemin.com/background-images/background-images/7b/ba/e5/cd/7bbae5cd2e9b644dee66b2ec7a5a3b1d_1000_1000.png"
             }
             alt="logo"
           />
           {item ? (
-            <div className="audio__songInfo">
+            <div className={classes["audio__songInfo"]}>
               <h4>{item?.name}</h4>
             </div>
           ) : (
-            <div className="footer__songInfo">
+            <div>
               <h4>No song is playing</h4>
               <p>...</p>
             </div>
           )}
         </Box>
-        <Box className="audio__center">
-          <Box className="audio__center-buttons">
-            <ShuffleIcon className="audio__green" />
-            <SkipPreviousIcon onClick={skipNext} className="audio__icon" />
+        <Box className={classes["audio__center"]}>
+          <Box className={classes["audio__center-buttons"]}>
+            <ShuffleIcon
+              className={clsx(classes["audio__green"], classes["audio__icon"])}
+            />
+            <SkipPreviousIcon
+              onClick={skipNext}
+              className={classes["audio__icon"]}
+            />
             {playing ? (
-              <PauseCircleOutlineIcon
+              <PauseCircleIcon
                 onClick={handlePlayPause}
                 fontSize="large"
-                className="audio__icon"
+                className={classes["audio__icon"]}
               />
             ) : (
-              <PlayCircleOutlineIcon
+              <PlayCircleIcon
                 onClick={handlePlayPause}
                 fontSize="large"
-                className="audio__icon"
+                className={classes["audio__icon"]}
               />
             )}
-            <SkipNextIcon onClick={skipPrevious} className="audio__icon" />
-            <RepeatIcon className="audio__green" />
+            <SkipNextIcon
+              onClick={skipPrevious}
+              className={classes["audio__icon"]}
+            />
+            <RepeatIcon
+              className={clsx(classes["audio__green"], classes["audio__icon"])}
+            />
           </Box>
-          <Box className="audio__center-controls">
-            <Box className="audio__center-controlsProgress">
+          <Box className={classes["audio__center-controls"]}>
+            <Box className={classes["audio__center-controlsTime"]}>
               {milisec2Minutes(currentTime * 1000)}
             </Box>
-            <Box className="audio__center-controlsSlider">
+            <Box className={classes["audio__center-controlsSlider"]}>
               <CustomSlider
                 aria-labelledby="continuous-slider"
                 min={0}
@@ -121,20 +134,20 @@ const AudioPlayer = () => {
                 value={currentTime}
               />
             </Box>
-            <Box className="audio__center-controlsProgress">
+            <Box className={classes["audio__center-controlsTime"]}>
               {milisec2Minutes(durationTime * 1000)}
             </Box>
           </Box>
         </Box>
-        <Box className="audio__right">
-          <Grid container spacing={2}>
+        <Box className={classes["audio__right"]}>
+          <Grid container justify="flex-end">
             <Grid item>
               <PlaylistPlayIcon />
             </Grid>
             <Grid item>
               <VolumeDownIcon />
             </Grid>
-            <Grid item xs>
+            <Grid item style={{ flex: "0 1 125px", marginRight: "15px" }}>
               <CustomSlider
                 aria-labelledby="volumn-slider"
                 onChange={debounce(handleVolumnChange, 100)}

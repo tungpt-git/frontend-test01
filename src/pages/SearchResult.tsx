@@ -8,7 +8,6 @@ import { searchVideos } from "../store/actions/videos";
 import { IStore, IVideo } from "../utils/types";
 import { useQuery } from "../utils/hooks";
 import { updateQuery } from "../store/actions/query";
-import { AudioPlayerLayout } from "../layouts";
 
 export default function SearchResult() {
   const videos = useSelector((state: IStore) => state.videos);
@@ -25,32 +24,24 @@ export default function SearchResult() {
   }, [dispatch, query]);
 
   return (
-    <AudioPlayerLayout>
-      <Box>
-        {/* <Box
-          display="grid"
-          gridGap={24}
-          gridTemplateColumns={`repeat(auto-fill, minmax(360px, 1fr))`}
-        > */}
-        {videos.map((video: IVideo, index: number) => (
-          <Box key={index} mt={3}>
-            <MediaCard
-              video={video}
-              onPlay={() => {
-                history.push(ROUTES.VIDEO.replace(":id", video.uid));
-              }}
-              onSegmentClick={(segment) => {
-                history.push(
-                  `${ROUTES.VIDEO.replace(":id", video.uid)}?start=${
-                    segment.start
-                  }`
-                );
-              }}
-            />
-          </Box>
-        ))}
-      </Box>
-      {/* </Box> */}
-    </AudioPlayerLayout>
+    <Box>
+      {videos.map((video: IVideo, index: number) => (
+        <Box key={index} mt={3}>
+          <MediaCard
+            video={video}
+            onPlay={() => {
+              history.push(ROUTES.VIDEO.replace(":id", video.uid));
+            }}
+            onSegmentClick={(segment) => {
+              history.push(
+                `${ROUTES.VIDEO.replace(":id", video.uid)}?start=${
+                  segment.start
+                }`
+              );
+            }}
+          />
+        </Box>
+      ))}
+    </Box>
   );
 }
