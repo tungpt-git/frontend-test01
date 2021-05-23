@@ -1,5 +1,5 @@
 import React from "react";
-import { Box } from "@material-ui/core";
+import { Box, Typography } from "@material-ui/core";
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router";
 import MediaCard from "../components/MediaCard/MediaCard";
@@ -8,9 +8,16 @@ import { searchVideos } from "../store/actions/videos";
 import { IStore, IVideo } from "../utils/types";
 import { useQuery } from "../utils/hooks";
 import { updateQuery } from "../store/actions/query";
+import { playVideo } from "../store/actions/nowPlaying";
 
 export default function SearchResult() {
-  const videos = useSelector((state: IStore) => state.videos);
+  const { videos, nowPlaying } = useSelector(
+    ({ videos, nowPlaying }: IStore) => ({
+      videos,
+      nowPlaying,
+    })
+  );
+
   const dispatch = useDispatch();
 
   const history = useHistory();
@@ -25,20 +32,23 @@ export default function SearchResult() {
 
   return (
     <Box>
+      <Typography variant="h5">Results</Typography>
       {videos.map((video: IVideo, index: number) => (
         <Box key={index} mt={3}>
           <MediaCard
             video={video}
             onPlay={() => {
-              history.push(ROUTES.VIDEO.replace(":id", video.uid));
-            }}
-            onSegmentClick={(segment) => {
-              history.push(
-                `${ROUTES.VIDEO.replace(":id", video.uid)}?start=${
-                  segment.start
-                }`
+              dispatch(
+                playVideo({
+                  ...video,
+                  isPlaying:
+                    video.uid === nowPlaying?.uid
+                      ? !nowPlaying.isPlaying
+                      : true,
+                })
               );
             }}
+            onSegmentClick={(segment) => {}}
           />
         </Box>
       ))}

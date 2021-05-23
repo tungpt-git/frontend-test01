@@ -9,7 +9,7 @@ import { ROUTES } from "../routers";
 import { useSelector } from "react-redux";
 import { IStore } from "../utils/types";
 
-const useStyles = makeStyles(() => ({
+const useStyles = makeStyles((theme) => ({
   root: {
     display: "grid",
     gridTemplateAreas: `"nav-bar main-view main-view"
@@ -23,10 +23,14 @@ const useStyles = makeStyles(() => ({
   },
   navBar: {
     gridArea: "nav-bar",
+    width: "300px",
+    background: "#000",
   },
   mainView: {
     gridArea: "main-view",
     overflowY: "auto",
+    padding: "20px",
+    // background: theme.palette.background.default,
   },
   audioPlayer: {
     gridArea: "audio-player",
@@ -47,8 +51,8 @@ const AudioPlayerLayout = ({ children }: Props) => {
 
   return (
     <Box className={classes.root}>
-      <Box className={classes.navBar}>navBar</Box>
-      <Box className={classes.mainView}>
+      <nav className={classes.navBar}>navBar</nav>
+      <main className={classes.mainView}>
         <header className={classes.searchBar}>
           <IconButton
             aria-label="back"
@@ -68,7 +72,7 @@ const AudioPlayerLayout = ({ children }: Props) => {
           />
         </header>
         <main>{children}</main>
-      </Box>
+      </main>
       <footer className={classes.audioPlayer}>
         <AudioPlayer />
       </footer>

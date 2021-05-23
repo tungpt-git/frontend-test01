@@ -3,16 +3,23 @@ export interface ISegment {
   end: number;
   text: string;
 }
+
+export type IMediaControls = {
+  isPlaying?: boolean;
+};
+
 export interface IVideo {
   uid: string;
   name: string;
   url: string;
   thumbnail: string;
   uploadedDate: string;
-  segments: ISegment[]
+  source: string;
+  segments: ISegment[];
 }
 
 export type IStore = {
   videos: IVideo[];
   query: string;
+  nowPlaying: IVideo & IMediaControls;
 };

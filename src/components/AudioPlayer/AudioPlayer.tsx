@@ -1,4 +1,4 @@
-import { Box, Grid, Slider, withStyles } from "@material-ui/core";
+import { Box, Grid, Slider, withStyles, Typography } from "@material-ui/core";
 import React from "react";
 import PlayCircleIcon from "@material-ui/icons/PlayCircleFilled";
 import SkipPreviousIcon from "@material-ui/icons/SkipPrevious";
@@ -12,28 +12,37 @@ import { milisec2Minutes } from "../../utils/helpers";
 import { debounce } from "lodash";
 import { useStyles } from "./styles";
 import clsx from "clsx";
+import { thumbnailImg } from "../../utils/mock";
+import { useSelector } from "react-redux";
+import { IStore } from "../../utils/types";
 
 const AudioPlayer = () => {
   const classes = useStyles();
 
   const audioRef = React.useRef<any>();
-
   const [playing, setPlaying] = React.useState(false);
   const [currentTime, setCurrentTime] = React.useState(0);
 
-  const item: any = undefined;
+  const item = useSelector((store: IStore) => store.nowPlaying);
+
+  React.useEffect(() => {
+    console.log(item);
+    if (audioRef?.current) {
+      handlePlayPause(!item.isPlaying);
+    }
+  }, [item]);
 
   const skipNext = () => {
     console.log("skip next");
   };
 
-  const handlePlayPause = () => {
-    if (playing) {
+  const handlePlayPause = (isPLaying: boolean = playing) => {
+    if (isPLaying) {
       audioRef.current.pause();
     } else {
       audioRef.current.play();
     }
-    setPlaying(!playing);
+    setPlaying(!isPLaying);
   };
 
   const skipPrevious = () => {};
@@ -66,7 +75,7 @@ const AudioPlayer = () => {
       <audio
         ref={audioRef}
         hidden
-        src="https://vod2.hanoitv.vn/CLIP2020/Thang08/FM90/Thoi_su_Ha_noi/30_8%20ts%2019h.mp3"
+        src={item?.source || ""}
         onTimeUpdate={() => {
           setCurrentTime(audioRef.current.currentTime);
         }}
@@ -75,19 +84,17 @@ const AudioPlayer = () => {
         <Box className={classes["audio__left"]}>
           <img
             className={classes["audio__albumLogo"]}
-            src={
-              "https://img.sparemin.com/background-images/background-images/7b/ba/e5/cd/7bbae5cd2e9b644dee66b2ec7a5a3b1d_1000_1000.png"
-            }
+            src={thumbnailImg}
             alt="logo"
           />
           {item ? (
             <div className={classes["audio__songInfo"]}>
-              <h4>{item?.name}</h4>
+              <Typography variant="body1">{item?.name}</Typography>
             </div>
           ) : (
             <div>
-              <h4>No song is playing</h4>
-              <p>...</p>
+              <Typography variant="body1">No song is playing</Typography>
+              <Typography>...</Typography>
             </div>
           )}
         </Box>
@@ -102,13 +109,13 @@ const AudioPlayer = () => {
             />
             {playing ? (
               <PauseCircleIcon
-                onClick={handlePlayPause}
+                onClick={() => handlePlayPause()}
                 fontSize="large"
                 className={classes["audio__icon"]}
               />
             ) : (
               <PlayCircleIcon
-                onClick={handlePlayPause}
+                onClick={() => handlePlayPause()}
                 fontSize="large"
                 className={classes["audio__icon"]}
               />
@@ -122,9 +129,9 @@ const AudioPlayer = () => {
             />
           </Box>
           <Box className={classes["audio__center-controls"]}>
-            <Box className={classes["audio__center-controlsTime"]}>
+            <Typography className={classes["audio__center-controlsTime"]}>
               {milisec2Minutes(currentTime * 1000)}
-            </Box>
+            </Typography>
             <Box className={classes["audio__center-controlsSlider"]}>
               <CustomSlider
                 aria-labelledby="continuous-slider"
@@ -134,9 +141,9 @@ const AudioPlayer = () => {
                 value={currentTime}
               />
             </Box>
-            <Box className={classes["audio__center-controlsTime"]}>
+            <Typography className={classes["audio__center-controlsTime"]}>
               {milisec2Minutes(durationTime * 1000)}
-            </Box>
+            </Typography>
           </Box>
         </Box>
         <Box className={classes["audio__right"]}>
