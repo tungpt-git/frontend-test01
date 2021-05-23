@@ -4,7 +4,7 @@ import { useParams } from "react-router";
 import { getVideo } from "../../api";
 import Segment from "../../components/Segment/Segment";
 import VideoPlayer from "../../components/VideoPlayer/VideoPlayer";
-import MenuLayout from "../../layouts/MenuLayout";
+import AudioPlayerLayout from "../../layouts/AudioPlayerLayout";
 import { useForceUpdate, useQuery } from "../../utils/hooks";
 import { IVideo } from "../../utils/types";
 
@@ -42,11 +42,11 @@ export default function WatchVideo(props: Props) {
   }, [start, playerRef?.current]);
 
   React.useEffect(() => {
-    const r = setInterval(() => {
-      forceUpdate();
-    }, 500);
+    // const r = setInterval(() => {
+    //   forceUpdate();
+    // }, 500);
 
-    return () => clearInterval(r);
+    // return () => clearInterval(r);
   });
 
   const currentTime: number = Math.ceil(
@@ -55,7 +55,7 @@ export default function WatchVideo(props: Props) {
   console.log("currentTime", currentTime);
 
   return (
-    <MenuLayout>
+    <AudioPlayerLayout>
       {!video ? (
         <CircularProgress />
       ) : (
@@ -87,6 +87,6 @@ export default function WatchVideo(props: Props) {
           </Grid>
         </Grid>
       )}
-    </MenuLayout>
+    </AudioPlayerLayout>
   );
 }

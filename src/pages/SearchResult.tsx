@@ -3,12 +3,12 @@ import { Box } from "@material-ui/core";
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router";
 import MediaCard from "../components/MediaCard/MediaCard";
-import MenuLayout from "../layouts/MenuLayout";
 import { ROUTES } from "../routers";
 import { searchVideos } from "../store/actions/videos";
 import { IStore, IVideo } from "../utils/types";
 import { useQuery } from "../utils/hooks";
 import { updateQuery } from "../store/actions/query";
+import { AudioPlayerLayout } from "../layouts";
 
 export default function SearchResult() {
   const videos = useSelector((state: IStore) => state.videos);
@@ -25,7 +25,7 @@ export default function SearchResult() {
   }, [dispatch, query]);
 
   return (
-    <MenuLayout>
+    <AudioPlayerLayout>
       <Box>
         {/* <Box
           display="grid"
@@ -51,6 +51,6 @@ export default function SearchResult() {
         ))}
       </Box>
       {/* </Box> */}
-    </MenuLayout>
+    </AudioPlayerLayout>
   );
 }

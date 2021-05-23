@@ -1,0 +1,105 @@
+.audio {
+  position: fixed;
+  display: flex;
+  justify-content: space-between;
+  bottom: 0;
+  padding: 20px;
+  height: 65px;
+  width: 97%;
+  background-color: #282828;
+}
+
+/* .audio__right * .MuiSlider-root {
+  color: green;
+} */
+.audio__left {
+  display: flex;
+  align-items: center;
+  color: white;
+  width: 300px;
+  flex: 0.3;
+}
+
+.audio__green {
+  color: #1ed15e;
+}
+
+.audio__center {
+  flex: 0.4;
+  max-width: 600px;
+  color: white;
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+}
+
+.audio__center-buttons {
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  max-width: 224px;
+  flex: 1;
+}
+
+.audio__center-controls {
+  display: flex;
+  align-items: center;
+  flex: 1;
+  width: 100%;
+}
+
+.audio__center-controls,
+.audio__center-buttons,
+.audio__center-controlsSlider,
+.audio__center-controlsSlider * {
+  width: 100%;
+}
+
+.audio__center-controlsSlider {
+  display: flex;
+  align-items: center;
+}
+
+.audio__center-controlsProgress,
+.audio__center-controlsDuration {
+  /* max-width: 40px; */
+  min-width: 40px;
+  text-align: center;
+  font-size: 11px;
+  font-weight: 400;
+  letter-spacing: normal;
+  line-height: 16px;
+  text-transform: none;
+}
+
+.audio__icon:hover,
+.audio__green:hover {
+  transition: transform 0.2s ease-in-out;
+  transform: scale(1.2) !important;
+}
+
+.audio__right {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  color: white;
+  flex: 0.2;
+}
+
+.audio__albumLogo {
+  height: 60px;
+  width: 60px;
+  margin-right: 20px;
+  object-fit: contain;
+}
+
+.audio__songInfo > h4 {
+  margin-bottom: 5px;
+}
+
+.audio__songInfo > p {
+  font-size: 12px;
+}
