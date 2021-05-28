@@ -1,4 +1,11 @@
-import { Box, Grid, Slider, withStyles, Typography } from "@material-ui/core";
+import {
+  Box,
+  Grid,
+  Slider,
+  withStyles,
+  Typography,
+  IconButton as IB,
+} from "@material-ui/core";
 import React from "react";
 import PlayCircleIcon from "@material-ui/icons/PlayCircleFilled";
 import SkipPreviousIcon from "@material-ui/icons/SkipPrevious";
@@ -15,20 +22,37 @@ import clsx from "clsx";
 import { thumbnailImg } from "../../utils/mock";
 import { useSelector } from "react-redux";
 import { IStore } from "../../utils/types";
+import VolumeUpIcon from "@material-ui/icons/VolumeUp";
+import VolumeMuteIcon from "@material-ui/icons/VolumeMute";
+import { ROUTES } from "../../routers";
+import { useHistory } from "react-router";
+import SubtitlesOutlinedIcon from '@material-ui/icons/SubtitlesOutlined';
+
+const IconButton = withStyles(() => ({
+  root: {
+    color: "white",
+  },
+}))(IB);
 
 const AudioPlayer = () => {
   const classes = useStyles();
+  const history = useHistory();
+
+  const nowPlaying = useSelector((store: IStore) => store.nowPlaying);
 
   const audioRef = React.useRef<any>();
   const [playing, setPlaying] = React.useState(false);
   const [currentTime, setCurrentTime] = React.useState(0);
-
+  const [volume, setVolume] = React.useState(1);
   const item = useSelector((store: IStore) => store.nowPlaying);
 
   React.useEffect(() => {
     console.log(item);
     if (audioRef?.current) {
-      handlePlayPause(!item.isPlaying);
+      handlePlayPause(!item?.isPlaying);
+      if (item?.startTime) {
+        audioRef.current.currentTime = item.startTime;
+      }
     }
   }, [item]);
 
@@ -37,6 +61,7 @@ const AudioPlayer = () => {
   };
 
   const handlePlayPause = (isPLaying: boolean = playing) => {
+    if (!item?.url) return;
     if (isPLaying) {
       audioRef.current.pause();
     } else {
@@ -65,6 +90,7 @@ const AudioPlayer = () => {
     if (audioRef?.current) {
       const v = newValue / 100;
       audioRef.current.volume = v;
+      setVolume(v);
     }
   };
 
@@ -75,7 +101,7 @@ const AudioPlayer = () => {
       <audio
         ref={audioRef}
         hidden
-        src={item?.source || ""}
+        src={item?.url || ""}
         onTimeUpdate={() => {
           setCurrentTime(audioRef.current.currentTime);
         }}
@@ -147,14 +173,34 @@ const AudioPlayer = () => {
           </Box>
         </Box>
         <Box className={classes["audio__right"]}>
-          <Grid container justify="flex-end">
+          <Grid container justify="flex-end" alignItems="center">
             <Grid item>
-              <PlaylistPlayIcon />
+              <IconButton
+                disabled={!nowPlaying?.uid}
+                onClick={() => {
+                  history.push(ROUTES.VIDEO.replace(":id", nowPlaying?.uid));
+                }}
+              >
+                <SubtitlesOutlinedIcon />
+              </IconButton>
             </Grid>
             <Grid item>
-              <VolumeDownIcon />
+              <IconButton>
+                <PlaylistPlayIcon />
+              </IconButton>
             </Grid>
-            <Grid item style={{ flex: "0 1 125px", marginRight: "15px" }}>
+            <Grid item>
+              <IconButton>
+                {volume === 0 ? (
+                  <VolumeMuteIcon />
+                ) : volume < 0.5 ? (
+                  <VolumeDownIcon />
+                ) : (
+                  <VolumeUpIcon />
+                )}
+              </IconButton>
+            </Grid>
+            <Grid item style={{ flex: "0 1 125px", margin: "0 15px 0 8px" }}>
               <CustomSlider
                 aria-labelledby="volumn-slider"
                 onChange={debounce(handleVolumnChange, 100)}

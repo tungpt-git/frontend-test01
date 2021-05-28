@@ -7,19 +7,17 @@ import {
 } from "@material-ui/core/styles";
 import Card from "@material-ui/core/Card";
 import CardContent from "@material-ui/core/CardContent";
-import CardMedia from "@material-ui/core/CardMedia";
 import IconButton from "@material-ui/core/IconButton";
 import Typography from "@material-ui/core/Typography";
-import PlayArrowIcon from "@material-ui/icons/PlayArrow";
 import { ISegment, IVideo } from "../../utils/types";
 import moment from "moment";
 import { Box, CardActions, Collapse } from "@material-ui/core";
-import { thumbnailImg } from "../../utils/mock";
 import FavoriteIcon from "@material-ui/icons/Favorite";
 import ShareIcon from "@material-ui/icons/Share";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
-import { milisec2Minutes } from "../../utils/helpers";
 import PlayCircleIcon from "@material-ui/icons/PlayCircleFilled";
+import PauseCircleIcon from "@material-ui/icons/PauseCircleFilled";
+import Segment from "../Segment/Segment";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -45,7 +43,7 @@ const useStyles = makeStyles((theme: Theme) =>
         top: 0,
         right: 0,
         padding: 0,
-        opacity: 0,
+        // opacity: 0,
         transition: "opacity 0.3s",
         zIndex: 1,
       },
@@ -71,7 +69,8 @@ const useStyles = makeStyles((theme: Theme) =>
 type Props = {
   video: IVideo;
   onPlay(): void;
-  onSegmentClick?(item: ISegment): void;
+  onSegmentClick(item: ISegment): void;
+  playing: boolean;
 };
 
 export default function MediaControlCard({ video, ...props }: Props) {
@@ -87,15 +86,18 @@ export default function MediaControlCard({ video, ...props }: Props) {
     <Card variant="outlined" className={classes.root}>
       <Box className={classes.content}>
         <Box className={classes.imgWrapper}>
-          <IconButton onClick={props.onPlay}>
-            <PlayCircleIcon style={{ fontSize: "92px" }} />
+          <IconButton
+            onClick={() => {
+              props.onPlay();
+              if (!props.playing) setExpanded(true);
+            }}
+          >
+            {props.playing ? (
+              <PauseCircleIcon style={{ fontSize: "92px" }} />
+            ) : (
+              <PlayCircleIcon style={{ fontSize: "92px" }} />
+            )}
           </IconButton>
-
-          <CardMedia
-            component={"img"}
-            image={thumbnailImg}
-            title="Live from space album cover"
-          />
         </Box>
         <CardContent>
           <Typography
@@ -129,9 +131,14 @@ export default function MediaControlCard({ video, ...props }: Props) {
       <Collapse in={expanded} timeout="auto" unmountOnExit>
         <CardContent>
           {video.segments.map((item, index) => (
-            <React.Fragment key={index}>
-              <SegmentItem item={item} index={index} />
-            </React.Fragment>
+            <Box
+              key={index}
+              onClick={() => {
+                props.onSegmentClick(item);
+              }}
+            >
+              <Segment item={item} index={index} />
+            </Box>
           ))}
         </CardContent>
       </Collapse>
@@ -149,38 +156,3 @@ const ExpandMore = styled((props) => {
     duration: theme.transitions.duration.shortest,
   }),
 }));
-
-const useStyles2 = makeStyles((theme) => ({
-  root: {
-    display: "flex",
-    padding: "8px",
-    borderRadius: "4px",
-    "&:hover": {
-      background: theme.palette.grey[200],
-    },
-  },
-  index: {
-    width: "40px",
-    textAlign: "center",
-  },
-  text: {
-    flex: 1,
-  },
-  time: {
-    flex: 0.2,
-    textAlign: "center",
-  },
-}));
-
-const SegmentItem = ({ item, index }: { item: ISegment; index: number }) => {
-  const classes = useStyles2();
-  return (
-    <Box className={classes.root}>
-      <Typography className={classes.index}>{index + 1}</Typography>
-      <Typography className={classes.text}>{item.text}</Typography>
-      <Typography className={classes.time}>
-        {milisec2Minutes(item.start * 10)} - {milisec2Minutes(item.end * 10)}
-      </Typography>
-    </Box>
-  );
-};

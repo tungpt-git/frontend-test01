@@ -1,5 +1,11 @@
+import { ArrowBack } from "@material-ui/icons";
+import { IconButton } from "material-ui";
 import React from "react";
-import { useLocation } from "react-router";
+import { useSelector } from "react-redux";
+import { useHistory, useLocation } from "react-router";
+import SearchBar from "../components/SearchBar/SearchBar";
+import { ROUTES } from "../routers";
+import { IStore } from "./types";
 
 export function useQuery() {
   return new URLSearchParams(useLocation().search);

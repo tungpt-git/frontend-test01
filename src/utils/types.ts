@@ -6,6 +6,7 @@ export interface ISegment {
 
 export type IMediaControls = {
   isPlaying?: boolean;
+  startTime?: number;
 };
 
 export interface IVideo {

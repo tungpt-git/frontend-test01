@@ -37,18 +37,28 @@ export default function SearchResult() {
         <Box key={index} mt={3}>
           <MediaCard
             video={video}
+            playing={
+              video.uid === nowPlaying?.uid ? !!nowPlaying?.isPlaying : false
+            }
             onPlay={() => {
+              const willPlay =
+                video.uid === nowPlaying?.uid ? !nowPlaying.isPlaying : true;
               dispatch(
                 playVideo({
                   ...video,
-                  isPlaying:
-                    video.uid === nowPlaying?.uid
-                      ? !nowPlaying.isPlaying
-                      : true,
+                  isPlaying: willPlay,
                 })
               );
             }}
-            onSegmentClick={(segment) => {}}
+            onSegmentClick={(segment) => {
+              dispatch(
+                playVideo({
+                  ...video,
+                  isPlaying: true,
+                  startTime: segment.start / 100,
+                })
+              );
+            }}
           />
         </Box>
       ))}

@@ -1,91 +1,42 @@
 import React from "react";
-import {
-  Box,
-  Chip,
-  Grid,
-  makeStyles,
-  Theme,
-  Typography,
-} from "@material-ui/core";
+import { Box, makeStyles, Typography } from "@material-ui/core";
 import { milisec2Minutes } from "../../utils/helpers";
 import { ISegment } from "../../utils/types";
-import clsx from "clsx";
 
-const useStyles = makeStyles((theme: Theme) => ({
-  wrapper: {
+const useStyles2 = makeStyles((theme) => ({
+  root: {
     display: "flex",
-  },
-  item: {
+    padding: "8px",
+    borderRadius: "4px",
     cursor: "pointer",
-    marginRight: 10,
+    "&:hover": {
+      background: theme.palette.grey[200],
+    },
   },
-  active: {
-    backgroundColor: `rgba(42,181,115,.15)`,
-    outline: `1px solid rgba(42,181,115,.5)`,
+  index: {
+    width: "40px",
+    textAlign: "center",
   },
   text: {
-    display: "inline-block",
-    "&:hover": {
-      background: `${theme.palette.grey[200]}`,
-      $textIcon: {
-        opacity: 1,
-      },
-    },
+    flex: 1,
   },
-  textWrapper: {
-    position: "relative",
-    padding: "0 10px",
-    "&:hover $textIcon": {
-      opacity: 1,
-    },
-  },
-
-  textIcon: {
-    position: "absolute",
-    right: "-10px",
-    top: "50%",
-    transform: "translateY(-50%)",
-    opacity: 0,
+  time: {
+    flex: 0.2,
+    textAlign: "center",
   },
 }));
 
-type Props = {
-  item: ISegment;
-  onClick(item: ISegment): void;
-  active?: boolean;
+const Segment = ({ item, index }: { item: ISegment; index: number }) => {
+  const classes = useStyles2();
+  return (
+    <Box className={classes.root}>
+      <Typography className={classes.index}>{index + 1}</Typography>
+      <Typography className={classes.text}>{item.text}</Typography>
+      <Typography className={classes.time}>
+        {milisec2Minutes(item.start * 10)} - {milisec2Minutes(item.end * 10)}
+      </Typography>
+    </Box>
+  );
 };
 
-export default function Segment({ item, active, ...props }: Props) {
-  const classes = useStyles();
-
-  return (
-    <Grid container className={classes.wrapper}>
-      <Grid item className={classes.item} onClick={() => props.onClick(item)}>
-        <Chip
-          variant={"outlined"}
-          size="small"
-          color="primary"
-          style={{ cursor: "pointer" }}
-          label={`${milisec2Minutes(item.start * 10)} - ${milisec2Minutes(
-            item.end * 10
-          )}`}
-        />
-      </Grid>
-      <Grid
-        item
-        xs
-        className={classes.item}
-        onClick={() => props.onClick(item)}
-      >
-        <Box
-          className={clsx(classes.text, {
-            [classes.active]: active,
-          })}
-        >
-          <Typography>{item.text}</Typography>
-        </Box>
-        <Box></Box>
-      </Grid>
-    </Grid>
-  );
-}
+export default Segment

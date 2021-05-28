@@ -7,7 +7,7 @@ import {
 } from "react-router-dom";
 import { ROUTES } from ".";
 import { AudioPlayerLayout } from "../layouts";
-import { Search, SearchResult, WatchVideo } from "../pages";
+import { Search, SearchResult, VideoDetails, WatchVideo } from "../pages";
 
 export default function GlobalRouters() {
   return (
@@ -23,7 +23,9 @@ export default function GlobalRouters() {
           </AudioPlayerLayout>
         </Route>
         <Route exact path={ROUTES.VIDEO}>
-          <WatchVideo />
+          <AudioPlayerLayout>
+            <VideoDetails />
+          </AudioPlayerLayout>
         </Route>
       </Switch>
     </Router>

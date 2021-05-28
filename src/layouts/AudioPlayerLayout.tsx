@@ -1,13 +1,7 @@
 import React, { PropsWithChildren } from "react";
-import { Box, Grid, IconButton, makeStyles } from "@material-ui/core";
+import { Box, makeStyles } from "@material-ui/core";
 import AudioPlayer from "../components/AudioPlayer/AudioPlayer";
-import MenuLayout from "./MenuLayout";
-import { useHistory } from "react-router";
-import { ArrowBack } from "@material-ui/icons";
-import SearchBar from "../components/SearchBar/SearchBar";
-import { ROUTES } from "../routers";
-import { useSelector } from "react-redux";
-import { IStore } from "../utils/types";
+import SearchVideo from "../components/SearchVideo/SearchVideo";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -46,30 +40,14 @@ type Props = PropsWithChildren<{}>;
 
 const AudioPlayerLayout = ({ children }: Props) => {
   const classes = useStyles();
-  const history = useHistory();
-  const query = useSelector((state: IStore) => state.query);
+
 
   return (
     <Box className={classes.root}>
       <nav className={classes.navBar}>navBar</nav>
       <main className={classes.mainView}>
         <header className={classes.searchBar}>
-          <IconButton
-            aria-label="back"
-            onClick={() => {
-              history.goBack();
-            }}
-          >
-            <ArrowBack />
-          </IconButton>
-          <SearchBar
-            defaultValue={query}
-            onSubmit={(s: string) => {
-              history.push(
-                ROUTES.SEARCH_RESULT + `?query=${encodeURIComponent(s)}`
-              );
-            }}
-          />
+          <SearchVideo />
         </header>
         <main>{children}</main>
       </main>
