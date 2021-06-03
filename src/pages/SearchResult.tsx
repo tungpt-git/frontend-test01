@@ -9,6 +9,7 @@ import { IStore, IVideo } from "../utils/types";
 import { useQuery } from "../utils/hooks";
 import { updateQuery } from "../store/actions/query";
 import { playVideo } from "../store/actions/nowPlaying";
+import strings from "../utils/strings";
 
 export default function SearchResult() {
   const { videos, nowPlaying } = useSelector(
@@ -19,8 +20,6 @@ export default function SearchResult() {
   );
 
   const dispatch = useDispatch();
-
-  const history = useHistory();
   const query = useQuery().get("query");
 
   React.useEffect(() => {
@@ -32,7 +31,7 @@ export default function SearchResult() {
 
   return (
     <Box>
-      <Typography variant="h5">Results</Typography>
+      <Typography variant="h5">{strings.results}</Typography>
       {videos.map((video: IVideo, index: number) => (
         <Box key={index} mt={3}>
           <MediaCard

@@ -20,17 +20,23 @@ import { debounce } from "lodash";
 import { useStyles } from "./styles";
 import clsx from "clsx";
 import { thumbnailImg } from "../../utils/mock";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { IStore } from "../../utils/types";
 import VolumeUpIcon from "@material-ui/icons/VolumeUp";
 import VolumeMuteIcon from "@material-ui/icons/VolumeMute";
 import { ROUTES } from "../../routers";
 import { useHistory } from "react-router";
-import SubtitlesOutlinedIcon from '@material-ui/icons/SubtitlesOutlined';
+import SubtitlesOutlinedIcon from "@material-ui/icons/SubtitlesOutlined";
+import strings from "../../utils/strings";
+import { playVideo } from "../../store/actions/nowPlaying";
 
-const IconButton = withStyles(() => ({
+const IconButton = withStyles((theme) => ({
   root: {
     color: "white",
+  },
+  disabled: {
+    color: "white !important",
+    opacity: 0.4,
   },
 }))(IB);
 
@@ -38,36 +44,36 @@ const AudioPlayer = () => {
   const classes = useStyles();
   const history = useHistory();
 
+  const dispatch = useDispatch();
   const nowPlaying = useSelector((store: IStore) => store.nowPlaying);
 
   const audioRef = React.useRef<any>();
   const [playing, setPlaying] = React.useState(false);
   const [currentTime, setCurrentTime] = React.useState(0);
   const [volume, setVolume] = React.useState(1);
-  const item = useSelector((store: IStore) => store.nowPlaying);
 
   React.useEffect(() => {
-    console.log(item);
+    console.log(nowPlaying);
     if (audioRef?.current) {
-      handlePlayPause(!item?.isPlaying);
-      if (item?.startTime) {
-        audioRef.current.currentTime = item.startTime;
+      handlePlayPause(!nowPlaying?.isPlaying);
+      if (nowPlaying?.startTime) {
+        audioRef.current.currentTime = nowPlaying.startTime;
       }
     }
-  }, [item]);
+  }, [nowPlaying]);
 
   const skipNext = () => {
     console.log("skip next");
   };
 
-  const handlePlayPause = (isPLaying: boolean = playing) => {
-    if (!item?.url) return;
-    if (isPLaying) {
+  const handlePlayPause = (isPlaying: boolean = playing) => {
+    if (!nowPlaying?.url) return;
+    if (isPlaying) {
       audioRef.current.pause();
     } else {
       audioRef.current.play();
     }
-    setPlaying(!isPLaying);
+    setPlaying(!isPlaying);
   };
 
   const skipPrevious = () => {};
@@ -83,6 +89,12 @@ const AudioPlayer = () => {
         setPlaying(false);
       }
     }
+  };
+
+  const handleSeek = (e: any, newValue: number | number[]) => {
+    if (Array.isArray(newValue)) return;
+    audioRef?.current?.pause();
+    setCurrentTime(newValue);
   };
 
   const handleVolumnChange = (e: any, newValue: number | number[]) => {
@@ -101,7 +113,7 @@ const AudioPlayer = () => {
       <audio
         ref={audioRef}
         hidden
-        src={item?.url || ""}
+        src={nowPlaying?.url || ""}
         onTimeUpdate={() => {
           setCurrentTime(audioRef.current.currentTime);
         }}
@@ -113,13 +125,15 @@ const AudioPlayer = () => {
             src={thumbnailImg}
             alt="logo"
           />
-          {item ? (
+          {nowPlaying ? (
             <div className={classes["audio__songInfo"]}>
-              <Typography variant="body1">{item?.name}</Typography>
+              <Typography variant="body1">{nowPlaying?.name}</Typography>
             </div>
           ) : (
             <div>
-              <Typography variant="body1">No song is playing</Typography>
+              <Typography variant="body1">
+                {strings.noPodcastIsPlaying}
+              </Typography>
               <Typography>...</Typography>
             </div>
           )}
@@ -164,6 +178,7 @@ const AudioPlayer = () => {
                 min={0}
                 max={durationTime}
                 onChangeCommitted={handleSeekMouseUp}
+                onChange={handleSeek}
                 value={currentTime}
               />
             </Box>

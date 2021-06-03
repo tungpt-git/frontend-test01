@@ -9,7 +9,7 @@ import Card from "@material-ui/core/Card";
 import CardContent from "@material-ui/core/CardContent";
 import IconButton from "@material-ui/core/IconButton";
 import Typography from "@material-ui/core/Typography";
-import { ISegment, IVideo } from "../../utils/types";
+import { ISegment, IStore, IVideo } from "../../utils/types";
 import moment from "moment";
 import { Box, CardActions, Collapse } from "@material-ui/core";
 import FavoriteIcon from "@material-ui/icons/Favorite";
@@ -18,11 +18,19 @@ import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import PlayCircleIcon from "@material-ui/icons/PlayCircleFilled";
 import PauseCircleIcon from "@material-ui/icons/PauseCircleFilled";
 import Segment from "../Segment/Segment";
+import { useSelector } from "react-redux";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
       padding: "20px",
+    },
+    videoName: {
+      fontWeight: "bold",
+      cursor: "pointer",
+      "&:hover": {
+        opacity: 0.7,
+      },
     },
     content: {
       display: "flex",
@@ -75,6 +83,7 @@ type Props = {
 
 export default function MediaControlCard({ video, ...props }: Props) {
   const classes = useStyles();
+  const query = useSelector((store: IStore) => store.query);
 
   const [expanded, setExpanded] = React.useState(false);
 
@@ -89,7 +98,9 @@ export default function MediaControlCard({ video, ...props }: Props) {
           <IconButton
             onClick={() => {
               props.onPlay();
-              if (!props.playing) setExpanded(true);
+              if (!props.playing) {
+                setExpanded(true);
+              }
             }}
           >
             {props.playing ? (
@@ -103,7 +114,13 @@ export default function MediaControlCard({ video, ...props }: Props) {
           <Typography
             variant="h5"
             title={video.name}
-            style={{ fontWeight: "bold" }}
+            className={classes.videoName}
+            onClick={() => {
+              if (!props.playing) {
+                props.onPlay();
+              }
+              setExpanded(true);
+            }}
           >
             {video.name}
           </Typography>
@@ -137,7 +154,7 @@ export default function MediaControlCard({ video, ...props }: Props) {
                 props.onSegmentClick(item);
               }}
             >
-              <Segment item={item} index={index} />
+              <Segment item={item} index={index} highlight={[query]} />
             </Box>
           ))}
         </CardContent>

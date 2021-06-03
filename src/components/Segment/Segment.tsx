@@ -2,6 +2,11 @@ import React from "react";
 import { Box, makeStyles, Typography } from "@material-ui/core";
 import { milisec2Minutes } from "../../utils/helpers";
 import { ISegment } from "../../utils/types";
+import Highlighter from "react-highlight-words";
+
+// const Highlighter = (props: any) => {
+//   return null;
+// };
 
 const useStyles2 = makeStyles((theme) => ({
   root: {
@@ -26,12 +31,25 @@ const useStyles2 = makeStyles((theme) => ({
   },
 }));
 
-const Segment = ({ item, index }: { item: ISegment; index: number }) => {
+type Props = {
+  item: ISegment;
+  index: number;
+  highlight?: string[];
+};
+
+const Segment = ({ item, index, ...props }: Props) => {
   const classes = useStyles2();
   return (
     <Box className={classes.root}>
       <Typography className={classes.index}>{index + 1}</Typography>
-      <Typography className={classes.text}>{item.text}</Typography>
+      <Typography className={classes.text}>
+        <Highlighter
+          searchWords={props.highlight || []}
+          autoEscape={true}
+          textToHighlight={item.text}
+          highlightStyle={{ fontWeight: 600, backgroundColor: "transparent" }}
+        />
+      </Typography>
       <Typography className={classes.time}>
         {milisec2Minutes(item.start * 10)} - {milisec2Minutes(item.end * 10)}
       </Typography>
@@ -39,4 +57,4 @@ const Segment = ({ item, index }: { item: ISegment; index: number }) => {
   );
 };
 
-export default Segment
+export default Segment;

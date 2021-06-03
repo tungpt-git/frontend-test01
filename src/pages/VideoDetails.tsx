@@ -16,11 +16,9 @@ const VideoDetails = () => {
       const res = await getVideo({ id });
       setVideo(res);
     };
-
-    console.log("uid");
     if (nowPlaying?.uid) fetchVideo(nowPlaying?.uid);
   }, [nowPlaying]);
-  console.log("render");
+
   return (
     <>
       <Lyrics
