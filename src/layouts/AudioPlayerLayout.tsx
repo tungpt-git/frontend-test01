@@ -1,10 +1,8 @@
 import React, { PropsWithChildren } from "react";
-import { Box, Button, makeStyles, Typography } from "@material-ui/core";
+import { Box, makeStyles } from "@material-ui/core";
 import AudioPlayer from "../components/AudioPlayer/AudioPlayer";
 import SearchVideo from "../components/SearchVideo/SearchVideo";
 import SideBar from "../components/SideBar/SideBar";
-import FilterLayout from "./FilterLayout";
-import FilterMenu from "../components/FilterMenu/FilterMenu";
 
 const useStyles = makeStyles((theme) => ({
   root: {

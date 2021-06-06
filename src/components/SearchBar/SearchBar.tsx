@@ -1,12 +1,12 @@
 import React from "react";
 import { makeStyles, Theme, createStyles } from "@material-ui/core/styles";
 import Paper from "@material-ui/core/Paper";
-import InputBase from "@material-ui/core/InputBase";
 import IconButton from "@material-ui/core/IconButton";
 import MenuIcon from "@material-ui/icons/Menu";
 import SearchIcon from "@material-ui/icons/Search";
-import FilterMenu from "../FilterMenu/FilterMenu";
 import strings from "../../utils/strings";
+import Mention from "../Mention";
+import { MENTION_MARKUP } from "../../utils/mock";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -56,7 +56,16 @@ export default function SearchBar(props: Props) {
         >
           <MenuIcon />
         </IconButton>
-        <InputBase
+        <Mention
+          className={classes.input}
+          value={text}
+          setValue={setText}
+          placeholder={strings.enterSearchQuery}
+          mentionProps={{
+            markup: MENTION_MARKUP,
+          }}
+        />
+        {/* <InputBase
           className={classes.input}
           placeholder={strings.enterSearchQuery}
           inputProps={{ "aria-label": "enter search query" }}
@@ -69,7 +78,7 @@ export default function SearchBar(props: Props) {
           onKeyDown={(event: React.KeyboardEvent) => {
             if (event.key === "Enter") props.onSubmit(text);
           }}
-        />
+        /> */}
         <IconButton
           type="submit"
           className={classes.iconButton}

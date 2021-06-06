@@ -1,5 +1,5 @@
-import { Box } from "@material-ui/core";
 import React from "react";
+import { Box } from "@material-ui/core";
 import { useHistory } from "react-router";
 import SearchBar from "../components/SearchBar/SearchBar";
 import { ROUTES } from "../routers";

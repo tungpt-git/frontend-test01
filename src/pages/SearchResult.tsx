@@ -1,9 +1,7 @@
 import React from "react";
 import { Box, Typography } from "@material-ui/core";
 import { useDispatch, useSelector } from "react-redux";
-import { useHistory } from "react-router";
 import MediaCard from "../components/MediaCard/MediaCard";
-import { ROUTES } from "../routers";
 import { searchVideos } from "../store/actions/videos";
 import { IStore, IVideo } from "../utils/types";
 import { useQuery } from "../utils/hooks";
