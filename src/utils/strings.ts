@@ -1,7 +1,7 @@
 export default {
-  enterSearchQuery: "Enter search query",
-  noPodcastIsPlaying: "No podcast is playing",
-  results: "Results",
+  enterSearchQuery: "Tìm kiếm",
+  noPodcastIsPlaying: "Không có podcast đang được chơi",
+  results: "Kết quả tìm kiếm",
   filterMenu: {
     broadcastTime: "Khung giờ",
     uploadedDate: "Ngày tải",

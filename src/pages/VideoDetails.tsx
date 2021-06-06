@@ -4,11 +4,12 @@ import { IStore, IVideo } from "../utils/types";
 import { getVideo } from "../api";
 import Lyrics from "../components/Lyrics/Lyrics";
 import { playVideo } from "../store/actions/nowPlaying";
+import { useParams } from "react-router-dom";
 
 const VideoDetails = () => {
   const dispatch = useDispatch();
   const nowPlaying = useSelector((store: IStore) => store.nowPlaying);
-
+  const { id } = useParams<{ id: string }>();
   const [video, setVideo] = React.useState<IVideo>();
 
   React.useEffect(() => {
@@ -16,8 +17,9 @@ const VideoDetails = () => {
       const res = await getVideo({ id });
       setVideo(res);
     };
-    if (nowPlaying?.uid) fetchVideo(nowPlaying?.uid);
-  }, [nowPlaying]);
+
+    fetchVideo(id);
+  }, [id]);
 
   return (
     <>

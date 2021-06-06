@@ -14,7 +14,7 @@ const Lyrics = (props: Props) => {
   return (
     <>
       {props.data.map((item, index) => (
-        <Box onClick={() => props.onSegmentClick(item)}>
+        <Box key={index} onClick={() => props.onSegmentClick(item)}>
           <Segment item={item} index={index} highlight={[query]} />
         </Box>
       ))}
