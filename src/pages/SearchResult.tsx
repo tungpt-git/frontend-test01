@@ -30,7 +30,9 @@ export default function SearchResult() {
 
   return (
     <Box>
-      <Typography variant="h5">{strings.results}</Typography>
+      <Typography style={{ fontWeight: 700 }} variant="h5">
+        {strings.results}
+      </Typography>
       {videos.map((video: IVideo, index: number) => (
         <Box key={index} mt={3}>
           <MediaCard

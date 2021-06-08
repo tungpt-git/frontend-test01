@@ -15,9 +15,10 @@ import strings from "../../utils/strings";
 import { KeyboardDatePicker } from "@material-ui/pickers";
 import { useDispatch, useSelector } from "react-redux";
 import { IFilter, IStore } from "../../utils/types";
-import { updateFilter } from "../../store/actions/filter";
+import { clearFilter, updateFilter } from "../../store/actions/filter";
 import { milisec2Minutes } from "../../utils/helpers";
 import { DURATION_MAX, DURATION_MIN } from "../../store/reducers/filter";
+import { searchVideos } from "../../store/actions/videos";
 
 const Slider = withStyles(() => ({
   root: {
@@ -61,7 +62,7 @@ const CATEGORIES = [
 export default function FilterMenu(props: Props) {
   const { filterMenu: copy } = strings;
 
-  const filter = useSelector((store: IStore) => store.filter);
+  const { filter, query } = useSelector((store: IStore) => store);
   const dispatch = useDispatch();
 
   const { durationRange, category, uploadedDate, sizeRange, broadCastTime } =
@@ -100,11 +101,13 @@ export default function FilterMenu(props: Props) {
   };
 
   const onApply = (e: React.MouseEvent) => {
+    dispatch(searchVideos(query, filter));
     props.onClose(e);
   };
 
   const onReset = (e: React.MouseEvent) => {
-    props.onClose(e);
+    dispatch(searchVideos(query));
+    dispatch(clearFilter());
   };
 
   return (

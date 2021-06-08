@@ -82,13 +82,9 @@ export default function SearchVideo() {
       <SearchBar
         defaultValue={query}
         onSubmit={(s: string) => {
-          if (isResultPage) {
-            dispatch(searchVideos(s, filter));
-          } else {
-            history.push(
-              ROUTES.SEARCH_RESULT + `?query=${encodeURIComponent(s)}`
-            );
-          }
+          history.push(
+            ROUTES.SEARCH_RESULT + `?query=${encodeURIComponent(s)}`
+          );
         }}
         onMenuClick={toggleDrawer("right", true)}
         inputProps={{
