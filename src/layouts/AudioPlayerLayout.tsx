@@ -35,11 +35,11 @@ const useStyles = makeStyles((theme) => ({
     display: "flex",
     alignItems: "center",
     gap: "8px",
-    padding: "20px 0 12px 0",
+    padding: "20px 0",
     position: "sticky",
     top: 0,
-    background: "#fff",
     zIndex: 100,
+    background: "#f9f9f9",
   },
 }));
 

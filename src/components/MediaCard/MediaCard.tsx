@@ -19,11 +19,15 @@ import PlayCircleIcon from "@material-ui/icons/PlayCircleFilled";
 import PauseCircleIcon from "@material-ui/icons/PauseCircleFilled";
 import Segment from "../Segment/Segment";
 import { useSelector } from "react-redux";
-
+import { getOperationArr, milisec2Minutes } from "../../utils/helpers";
+import { Operation } from "../../utils/enum";
+import DownloadIcon from "@material-ui/icons/CloudDownload";
+import { theme } from "../../theme";
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
       padding: "20px",
+      borderRadius: "20px",
     },
     videoName: {
       fontWeight: "bold",
@@ -92,10 +96,13 @@ export default function MediaControlCard({ video, ...props }: Props) {
   };
 
   return (
-    <Card variant="outlined" className={classes.root}>
+    <Card className={classes.root}>
       <Box className={classes.content}>
         <Box className={classes.imgWrapper}>
           <IconButton
+            style={{
+              boxShadow: theme.shadows[2],
+            }}
             onClick={() => {
               props.onPlay();
               if (!props.playing) {
@@ -125,6 +132,9 @@ export default function MediaControlCard({ video, ...props }: Props) {
             {video.name}
           </Typography>
           <Typography variant="body2" color="textSecondary">
+            {milisec2Minutes(video.duration * 1000)}
+          </Typography>
+          <Typography variant="body2" color="textSecondary">
             {moment(video.uploadedDate).fromNow()}
           </Typography>
         </CardContent>
@@ -132,8 +142,12 @@ export default function MediaControlCard({ video, ...props }: Props) {
           <IconButton aria-label="add to favorites">
             <FavoriteIcon />
           </IconButton>
-          <IconButton aria-label="share">
-            <ShareIcon />
+          <IconButton aria-label="download">
+            <DownloadIcon
+              onClick={() => {
+                window.open(video.url, "_blank");
+              }}
+            />
           </IconButton>
           <ExpandMore
             expand={expanded}
@@ -154,7 +168,11 @@ export default function MediaControlCard({ video, ...props }: Props) {
                 props.onSegmentClick(item);
               }}
             >
-              <Segment item={item} index={index} highlight={[query]} />
+              <Segment
+                item={item}
+                index={index}
+                highlight={getOperationArr(query, Operation.AND)}
+              />
             </Box>
           ))}
         </CardContent>

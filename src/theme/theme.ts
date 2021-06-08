@@ -17,7 +17,6 @@ const theme = createMuiTheme({
     },
     background: {
       default: "#282828",
-      // paper: "#181818",
     },
     action: {
       // active: "#fff",
@@ -40,6 +39,7 @@ const theme = createMuiTheme({
       "900": "#0F172A",
     },
   },
+
   typography: {
     fontSize: 14,
     fontFamily: ["Open Sans", "Arial", "sans-serif"].join(","),

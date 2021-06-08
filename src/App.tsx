@@ -8,7 +8,6 @@ import { MuiPickersUtilsProvider } from "@material-ui/pickers";
 import DateUtils from "@date-io/date-fns";
 
 function App() {
-  console.log(theme);
   return (
     <div className="App">
       <ThemeProvider theme={theme}>

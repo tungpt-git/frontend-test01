@@ -3,11 +3,14 @@ export default {
   noPodcastIsPlaying: "Không có podcast nào được bật",
   results: "Kết quả tìm kiếm",
   filterMenu: {
-    broadcastTime: "Khung giờ",
-    uploadedDate: "Ngày tải",
+    filterConditions: "Tìm kiếm nâng cao",
+    broadcastTime: "Khung giờ phát sóng",
+    uploadedDate: "Ngày tải lên",
     mc: "MC",
     duration: "Thời lượng",
     size: "Kích thước",
     category: "Thể loại",
+    apply: "Áp dụng",
+    reset: "Reset",
   },
 };

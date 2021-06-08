@@ -104,7 +104,6 @@ const VideoPlayer = forwardRef(
     };
 
     const handleSeekChange = (e: any, newValue: any) => {
-      console.log({ newValue });
       setState({ ...state, played: parseFloat(`${newValue / 100}`) });
     };
 
@@ -113,9 +112,7 @@ const VideoPlayer = forwardRef(
     };
 
     const handleSeekMouseUp = (e: any, newValue: any) => {
-      console.log({ value: e.target });
       setState({ ...state, seeking: false });
-      // console.log(sliderRef.current.value)
       playerRef.current.seekTo(newValue / 100, "fraction");
     };
 
@@ -131,7 +128,6 @@ const VideoPlayer = forwardRef(
       });
     };
     const handleVolumeChange = (e: any, newValue: any) => {
-      // console.log(newValue);
       setState({
         ...state,
         volume: parseFloat(`${newValue / 100}`),

@@ -1,49 +1,26 @@
 import axios, { AxiosResponse } from "axios";
 import { Operation, OperationLabel } from "../utils/enum";
-import { IVideo } from "../utils/types";
+import { getOperationArr } from "../utils/helpers";
+import { IFilter, IVideo } from "../utils/types";
 
 export const proxy = process.env.REACT_APP_PROXY || "";
 
-const OPERATORS = [
-  { label: OperationLabel.AND, id: Operation.AND },
-  { label: OperationLabel.NOT, id: Operation.NOT },
-];
-
-export const searchVideos = async (req: { query: string }) => {
-  const arr = req.query.split("@");
-
-  const temp = arr
-    .map((item) => {
-      const text = item.slice(item.indexOf("$") + 1).trim();
-      for (const op of OPERATORS) {
-        if (item.includes(`[${op.label}](${op.id})`)) {
-          return {
-            operation: op.id,
-            text,
-          };
-        }
-      }
-
-      return {
-        operation: Operation.AND,
-        text,
-      };
-    })
-    .filter((i) => !!i.text);
-
-  const getFn = (op: Operation) => {
-    return temp
-      .filter((item) => item?.operation === op)
-      .map((item) => item.text);
-  };
-
-  const match = getFn(Operation.AND);
-  const notMatch = getFn(Operation.NOT);
-
-  console.log({ match, notMatch });
+export const searchVideos = async ({
+  query,
+  filter,
+}: {
+  query: string;
+  filter?: IFilter;
+}) => {
+  const match = getOperationArr(query, Operation.AND);
+  const notMatch = getOperationArr(query, Operation.NOT);
 
   return await axios
-    .post<AxiosResponse<any>>(`/videos/complex-search`, { match, notMatch })
+    .post<AxiosResponse<any>>(`/videos/complex-search`, {
+      match,
+      notMatch,
+      filter,
+    })
     .then(({ data }: any) => data);
 };
 

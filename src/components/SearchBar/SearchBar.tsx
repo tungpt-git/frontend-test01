@@ -7,6 +7,7 @@ import SearchIcon from "@material-ui/icons/Search";
 import strings from "../../utils/strings";
 import Mention from "../Mention";
 import { MENTION_MARKUP } from "../../utils/mock";
+import { MentionProps, MentionsInputProps } from "react-mentions";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -36,6 +37,8 @@ type Props = {
   onSubmit(query: string): void;
   defaultValue?: string;
   onMenuClick?(e: React.MouseEvent): void;
+  mentionProps?: Partial<MentionProps>;
+  inputProps?: Partial<MentionsInputProps>;
 };
 
 export default function SearchBar(props: Props) {
@@ -61,24 +64,17 @@ export default function SearchBar(props: Props) {
           value={text}
           setValue={setText}
           placeholder={strings.enterSearchQuery}
+          onKeyDown={(e) => {
+            if (e.key === "Enter" && e.shiftKey) {
+              props.onSubmit(text);
+            }
+          }}
           mentionProps={{
             markup: MENTION_MARKUP,
+            ...props.mentionProps,
           }}
+          {...props.inputProps}
         />
-        {/* <InputBase
-          className={classes.input}
-          placeholder={strings.enterSearchQuery}
-          inputProps={{ "aria-label": "enter search query" }}
-          value={text}
-          onChange={(
-            event: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>
-          ) => {
-            setText(event.currentTarget.value);
-          }}
-          onKeyDown={(event: React.KeyboardEvent) => {
-            if (event.key === "Enter") props.onSubmit(text);
-          }}
-        /> */}
         <IconButton
           type="submit"
           className={classes.iconButton}

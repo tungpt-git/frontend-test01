@@ -12,7 +12,6 @@ export const playVideo =
 
 export const getInfo = (id: string) => async (dispatch: Dispatch) => {
   const res = await api.getVideo({ id });
-  console.log(res);
   dispatch({
     type: ActionTypes.GET_VIDEO_INFO,
     payload: res,

@@ -19,11 +19,12 @@ export default function SearchResult() {
 
   const dispatch = useDispatch();
   const query = useQuery().get("query");
+  const filter = useSelector((store: IStore) => store.filter);
 
   React.useEffect(() => {
-    if (query) {
+    if (query !== null) {
       dispatch(updateQuery(query));
-      dispatch(searchVideos(decodeURIComponent(query)));
+      dispatch(searchVideos(decodeURIComponent(query), filter));
     }
   }, [dispatch, query]);
 

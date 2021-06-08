@@ -26,7 +26,6 @@ const VideoDetails = () => {
       <Lyrics
         data={video?.segments || []}
         onSegmentClick={(s) => {
-          console.log(s);
           dispatch(playVideo({ ...nowPlaying, startTime: s.start / 100 }));
         }}
       />

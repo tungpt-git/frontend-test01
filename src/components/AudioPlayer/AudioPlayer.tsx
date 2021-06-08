@@ -53,7 +53,6 @@ const AudioPlayer = () => {
   const [volume, setVolume] = React.useState(1);
 
   React.useEffect(() => {
-    console.log(nowPlaying);
     if (audioRef?.current) {
       handlePlayPause(!nowPlaying?.isPlaying);
       if (nowPlaying?.startTime) {
