@@ -123,10 +123,7 @@ export default function MediaControlCard({ video, ...props }: Props) {
             title={video.name}
             className={classes.videoName}
             onClick={() => {
-              if (!props.playing) {
-                props.onPlay();
-              }
-              setExpanded(true);
+              setExpanded(!expanded);
             }}
           >
             {video.name}

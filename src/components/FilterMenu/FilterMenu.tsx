@@ -16,8 +16,13 @@ import { KeyboardDatePicker } from "@material-ui/pickers";
 import { useDispatch, useSelector } from "react-redux";
 import { IFilter, IStore } from "../../utils/types";
 import { clearFilter, updateFilter } from "../../store/actions/filter";
-import { milisec2Minutes } from "../../utils/helpers";
-import { DURATION_MAX, DURATION_MIN } from "../../store/reducers/filter";
+import { formatKB, milisec2Minutes } from "../../utils/helpers";
+import {
+  DURATION_MAX,
+  DURATION_MIN,
+  SIZE_MAX,
+  SIZE_MIN,
+} from "../../store/reducers/filter";
 import { searchVideos } from "../../store/actions/videos";
 
 const Slider = withStyles(() => ({
@@ -65,8 +70,17 @@ export default function FilterMenu(props: Props) {
   const { filter, query } = useSelector((store: IStore) => store);
   const dispatch = useDispatch();
 
-  const { durationRange, category, uploadedDate, sizeRange, broadCastTime } =
-    filter;
+  const {
+    durationRange,
+    category,
+    uploadedDateFrom,
+    uploadedDateTo,
+    sizeRange,
+    broadCastTime,
+  } = filter;
+
+  const [duration, setDuration] = React.useState<number[]>(durationRange);
+  const [size, setSize] = React.useState<number[]>(sizeRange);
 
   const update = (key: keyof IFilter, value: any) => {
     dispatch(updateFilter({ [key]: value }));
@@ -83,10 +97,18 @@ export default function FilterMenu(props: Props) {
   };
 
   const handleDurationChange = (event: any, newValue: number | number[]) => {
+    setDuration(newValue as number[]);
+  };
+
+  const handleDurationCommited = (event: any, newValue: number | number[]) => {
     update("durationRange", newValue as number[]);
   };
 
   const handleSizeChange = (event: any, newValue: number | number[]) => {
+    setSize(newValue as number[]);
+  };
+
+  const handleSizeCommited = (event: any, newValue: number | number[]) => {
     update("sizeRange", newValue as number[]);
   };
 
@@ -96,8 +118,8 @@ export default function FilterMenu(props: Props) {
     update("category", event.target.value as string[]);
   };
 
-  const handleDateChange = (date: Date | null) => {
-    update("uploadedDate", date);
+  const handleDateChange = (key: keyof IFilter, date: Date | null) => {
+    update(key, date);
   };
 
   const onApply = (e: React.MouseEvent) => {
@@ -106,8 +128,8 @@ export default function FilterMenu(props: Props) {
   };
 
   const onReset = (e: React.MouseEvent) => {
-    dispatch(searchVideos(query));
     dispatch(clearFilter());
+    dispatch(searchVideos(query));
   };
 
   return (
@@ -165,9 +187,22 @@ export default function FilterMenu(props: Props) {
           variant="inline"
           format="dd/MM/yyyy"
           margin="normal"
-          id="date-picker-inline"
-          value={uploadedDate}
-          onChange={handleDateChange}
+          id="date-picker-from"
+          value={uploadedDateFrom}
+          onChange={(d) => handleDateChange("uploadedDateFrom", d)}
+          KeyboardButtonProps={{
+            "aria-label": "change date",
+          }}
+        />
+        <KeyboardDatePicker
+          inputVariant="outlined"
+          disableToolbar
+          variant="inline"
+          format="dd/MM/yyyy"
+          margin="normal"
+          id="date-picker-to"
+          value={uploadedDateTo}
+          onChange={(d) => handleDateChange("uploadedDateTo", d)}
           KeyboardButtonProps={{
             "aria-label": "change date",
           }}
@@ -179,11 +214,12 @@ export default function FilterMenu(props: Props) {
           <Slider
             min={DURATION_MIN}
             max={DURATION_MAX}
-            value={durationRange}
+            value={duration}
             onChange={handleDurationChange}
+            onChangeCommitted={handleDurationCommited}
             valueLabelDisplay="off"
             aria-labelledby="range-slider"
-            marks={durationRange.map((value) => ({
+            marks={duration.map((value) => ({
               value,
               label: milisec2Minutes(value * 1000),
             }))}
@@ -194,11 +230,14 @@ export default function FilterMenu(props: Props) {
         <Typography variant="subtitle2">{copy.size}</Typography>
         <Grid style={{ margin: "0 20px" }}>
           <Slider
-            value={sizeRange}
+            min={SIZE_MIN}
+            max={SIZE_MAX}
+            value={size}
             onChange={handleSizeChange}
+            onChangeCommitted={handleSizeCommited}
             valueLabelDisplay="off"
             aria-labelledby="range-slider"
-            marks={sizeRange.map((value) => ({ value, label: value }))}
+            marks={size.map((value) => ({ value, label: formatKB(value) }))}
           />
         </Grid>
       </Grid>

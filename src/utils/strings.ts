@@ -2,6 +2,7 @@ export default {
   enterSearchQuery: "Tìm kiếm",
   noPodcastIsPlaying: "Không có podcast nào được bật",
   results: "Kết quả tìm kiếm",
+  home: "Trang chủ",
   filterMenu: {
     filterConditions: "Tìm kiếm nâng cao",
     broadcastTime: "Khung giờ phát sóng",

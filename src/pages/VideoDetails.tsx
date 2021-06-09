@@ -5,6 +5,7 @@ import { getVideo } from "../api";
 import Lyrics from "../components/Lyrics/Lyrics";
 import { playVideo } from "../store/actions/nowPlaying";
 import { useParams } from "react-router-dom";
+import { Box, Typography } from "@material-ui/core";
 
 const VideoDetails = () => {
   const dispatch = useDispatch();
@@ -21,8 +22,11 @@ const VideoDetails = () => {
     fetchVideo(id);
   }, [id]);
 
+  if (!video) return null;
   return (
     <>
+      <Typography variant="h5">{video?.name}</Typography>
+
       <Lyrics
         data={video?.segments || []}
         onSegmentClick={(s) => {

@@ -32,5 +32,6 @@ export type IFilter = {
   durationRange: number[];
   sizeRange: number[];
   category: string[];
-  uploadedDate: Date | null;
+  uploadedDateFrom: Date | null;
+  uploadedDateTo: Date | null;
 };
