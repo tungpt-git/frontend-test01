@@ -5,6 +5,8 @@ import SearchBar from "../components/SearchBar/SearchBar";
 import { ROUTES } from "../routers";
 import clsx from "clsx";
 import shadows from "@material-ui/core/styles/shadows";
+import { useDispatch } from "react-redux";
+import { clearFilter, updateFilter } from "../store/actions/filter";
 
 const useStyles = makeStyles((theme) => ({
   wrapper: {
@@ -25,6 +27,7 @@ const useStyles = makeStyles((theme) => ({
 export default function Search() {
   const classes = useStyles();
   const history = useHistory();
+  const dispatch = useDispatch();
 
   return (
     <Box
@@ -42,8 +45,12 @@ export default function Search() {
           Welcome
         </Typography>
         <SearchBar
+          inputProps={{
+            placeholder: "Enter your search string",
+          }}
           onSubmit={(query: string) => {
             if (!query) return;
+            dispatch(clearFilter());
             history.push(
               ROUTES.SEARCH_RESULT + `?query=${encodeURIComponent(query)}`
             );
