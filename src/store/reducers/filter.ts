@@ -13,8 +13,8 @@ const init: T = {
   durationRange: [DURATION_MIN, DURATION_MAX],
   sizeRange: [SIZE_MIN, SIZE_MAX],
   category: [],
-  uploadedDateFrom: null,
-  uploadedDateTo: null,
+  broadCastDateFrom: null,
+  broadCastDateTo: null,
 };
 
 const reducers = (

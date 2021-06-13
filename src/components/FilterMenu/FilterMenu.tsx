@@ -73,8 +73,8 @@ export default function FilterMenu(props: Props) {
   const {
     durationRange,
     category,
-    uploadedDateFrom,
-    uploadedDateTo,
+    broadCastDateFrom,
+    broadCastDateTo,
     sizeRange,
     broadCastTime,
   } = filter;
@@ -142,7 +142,7 @@ export default function FilterMenu(props: Props) {
           {copy.reset}
         </Button>
       </Grid>
-      <Grid item>
+      {/* <Grid item>
         <Typography variant="subtitle2">{copy.broadcastTime}</Typography>
         <Grid>
           {BROAD_CASTS.map((b) => (
@@ -160,7 +160,7 @@ export default function FilterMenu(props: Props) {
             />
           ))}
         </Grid>
-      </Grid>
+      </Grid> */}
       <Grid item>
         <Typography variant="subtitle2">{copy.category}</Typography>
         <Select
@@ -180,7 +180,7 @@ export default function FilterMenu(props: Props) {
         </Select>
       </Grid>
       <Grid item>
-        <Typography variant="subtitle2">{copy.uploadedDate}</Typography>
+        <Typography variant="subtitle2">{copy.broadCastDate}</Typography>
         <KeyboardDatePicker
           inputVariant="outlined"
           disableToolbar
@@ -188,8 +188,8 @@ export default function FilterMenu(props: Props) {
           format="dd/MM/yyyy"
           margin="normal"
           id="date-picker-from"
-          value={uploadedDateFrom}
-          onChange={(d) => handleDateChange("uploadedDateFrom", d)}
+          value={broadCastDateFrom}
+          onChange={(d) => handleDateChange("broadCastDateFrom", d)}
           KeyboardButtonProps={{
             "aria-label": "change date",
           }}
@@ -201,8 +201,8 @@ export default function FilterMenu(props: Props) {
           format="dd/MM/yyyy"
           margin="normal"
           id="date-picker-to"
-          value={uploadedDateTo}
-          onChange={(d) => handleDateChange("uploadedDateTo", d)}
+          value={broadCastDateTo}
+          onChange={(d) => handleDateChange("broadCastDateTo", d)}
           KeyboardButtonProps={{
             "aria-label": "change date",
           }}
@@ -226,7 +226,7 @@ export default function FilterMenu(props: Props) {
           />
         </Grid>
       </Grid>
-      <Grid item>
+      {/* <Grid item>
         <Typography variant="subtitle2">{copy.size}</Typography>
         <Grid style={{ margin: "0 20px" }}>
           <Slider
@@ -240,7 +240,7 @@ export default function FilterMenu(props: Props) {
             marks={size.map((value) => ({ value, label: formatKB(value) }))}
           />
         </Grid>
-      </Grid>
+      </Grid> */}
     </FilterMenuContainer>
   );
 }

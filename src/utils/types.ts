@@ -15,6 +15,7 @@ export interface IVideo {
   url: string;
   thumbnail: string;
   uploadedDate: string;
+  broadCastDate: string;
   source: string;
   segments: ISegment[];
   duration: number;
@@ -32,6 +33,6 @@ export type IFilter = {
   durationRange: number[];
   sizeRange: number[];
   category: string[];
-  uploadedDateFrom: Date | null;
-  uploadedDateTo: Date | null;
+  broadCastDateFrom: Date | null;
+  broadCastDateTo: Date | null;
 };

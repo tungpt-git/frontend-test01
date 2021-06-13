@@ -6,6 +6,7 @@ export default {
   filterMenu: {
     filterConditions: "Tìm kiếm nâng cao",
     broadcastTime: "Khung giờ phát sóng",
+    broadCastDate: "Ngày phát sóng",
     uploadedDate: "Ngày tải lên",
     mc: "MC",
     duration: "Thời lượng",

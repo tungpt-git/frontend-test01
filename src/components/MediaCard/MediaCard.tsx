@@ -132,7 +132,7 @@ export default function MediaControlCard({ video, ...props }: Props) {
             {milisec2Minutes(video.duration * 1000)}
           </Typography>
           <Typography variant="body2" color="textSecondary">
-            {moment(video.uploadedDate).fromNow()}
+            {moment(video.broadCastDate).format("DD/MM/yyyy")}
           </Typography>
         </CardContent>
         <CardActions disableSpacing>

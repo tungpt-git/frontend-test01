@@ -1,6 +1,6 @@
 import axios, { AxiosResponse } from "axios";
 import moment from "moment";
-import { Operation, OperationLabel } from "../utils/enum";
+import { Operation } from "../utils/enum";
 import { getOperationArr } from "../utils/helpers";
 import { IFilter, IVideo } from "../utils/types";
 
@@ -16,7 +16,7 @@ export const searchVideos = async ({
   const match = getOperationArr(query, Operation.AND);
   const notMatch = getOperationArr(query, Operation.NOT);
 
-  const { uploadedDateFrom: uf, uploadedDateTo: ut } = filter || {};
+  const { broadCastDateFrom: uf, broadCastDateTo: ut } = filter || {};
 
   return await axios
     .post<AxiosResponse<any>>(`/videos/complex-search`, {
@@ -24,8 +24,8 @@ export const searchVideos = async ({
       notMatch,
       filter: {
         ...filter,
-        uploadedDateFrom: !uf ? null : moment(uf).startOf("day"),
-        uploadedDateTo: !ut ? null : moment(ut).endOf("date"),
+        broadCastDateFrom: !uf ? null : moment(uf).startOf("day"),
+        broadCastDateTo: !ut ? null : moment(ut).endOf("date"),
       },
     })
     .then(({ data }: any) => data);
